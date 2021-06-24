@@ -1,0 +1,19 @@
+{
+  "name": "desperate-students",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server"
+  },
+  "author": "Adib Zaini",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "js-beautify": "^1.13.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
