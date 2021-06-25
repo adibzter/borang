@@ -11,20 +11,25 @@
 </head>
 
 <body>
-	<div>
-		<h1>Google Form for desperate students</h1>
-		<form id="form">
-			<label htmlFor='url'>Enter URL</label>
-			<input id='url' name="url" type='text' autoComplete='off' />
-			<button id="get-form">Get Form</button>
-			<p>
-				Example URL:
-				https://docs.google.com/forms/.../viewform
-			</p>
-			<p>
-				<b>Make sure of '/viewform' at the end of URL</b>
-			</p>
-		</form>
+	<div id="main-div">
+		<div id="inner-div">
+			<h1>GOOGLE FORM FOR DESPERATE STUDENTS</h1>
+			<br>
+			<form id="form">
+				<div id="url-div">
+					<label htmlFor='url'>Enter URL</label>
+					<input id='url' name="url" type='text' autoComplete='off' require />
+					<button id="get-form">Get Form</button>
+				</div>
+				<p>
+					Example URL:
+					https://docs.google.com/forms/.../viewform
+				</p>
+				<p>
+					<b>Make sure of '/viewform' at the end of URL</b>
+				</p>
+			</form>
+		</div>
 	</div>
 	<script src="./index.js"></script>
 </body>

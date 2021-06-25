@@ -1,11 +1,25 @@
 const url = `${location.protocol}//${location.host}`;
 
+const form = document.querySelector('form');
 const getFormButton = document.querySelector('#get-form');
 
 getFormButton.onclick = async (e) => {
   e.preventDefault();
 
-  const googleUrl = document.querySelector('#url').value;
+  const input = document.querySelector('#url');
+  input.style.outline = 'solid #74c69d';
+
+  const googleUrl = input.value;
+
+  if (!googleUrl) return;
+  if (
+    !/docs.google.com\/forms/.test(googleUrl) ||
+    !/viewform/.test(googleUrl)
+  ) {
+    alert('URL not valid');
+    return;
+  }
+
   let htmlData = await getForm(url, googleUrl);
 
   htmlData = scriptInjection(htmlData);

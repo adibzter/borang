@@ -1,6 +1,50 @@
-.google-form {
-  border: solid 1px black;
-  width: 80%;
-  height: 300px;
+body {
+  margin: auto 0;
+  background-color: black;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body #main-div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 100%;
+  height: 100vh;
+}
+
+body #main-div #inner-div h1 {
+  text-align: center;
+}
+
+body #main-div #inner-div #url-div {
+  font-size: 1.2rem;
+}
+
+body #main-div #inner-div #url-div #url {
+  width: 60vw;
+  height: 2rem;
+  font-size: 1rem;
+  border: none;
+}
+
+body #main-div #inner-div #url-div #url:hover {
+  outline: solid #219ebc;
+}
+
+body #main-div #inner-div #url-div #get-form {
+  height: 2rem;
+  font-size: 1.2rem;
+}
+
+body #main-div #inner-div #url-div #get-form:hover {
+  background-color: #8ecae6;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */

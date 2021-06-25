@@ -1,5 +1,50 @@
-.google-form {
-	border: solid 1px black;
-	width: 80%;
-	height: 300px;
+$bg-color: black;
+$text-color: white;
+$primary-color: #219ebc;
+$secondary-color: #8ecae6;
+
+body {
+  margin: auto 0;
+  background-color: $bg-color;
+  color: $text-color;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  #main-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    #inner-div {
+			h1 {
+				text-align: center;
+			}
+      #url-div {
+        font-size: 1.2rem;
+
+        // Input URL
+        #url {
+          width: 60vw;
+          height: 2rem;
+          font-size: 1rem;
+          border: none;
+
+          &:hover {
+            outline: solid $primary-color;
+          }
+        }
+
+        // Button
+        #get-form {
+          height: 2rem;
+          font-size: 1.2rem;
+
+          &:hover {
+            background-color: $secondary-color;
+						cursor: pointer;
+          }
+        }
+      }
+    }
+  }
 }
