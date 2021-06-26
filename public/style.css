@@ -28,7 +28,7 @@ body #main-div #inner-div #url-div {
 }
 
 body #main-div #inner-div #url-div #url {
-  width: 60vw;
+  width: 50vw;
   height: 2rem;
   font-size: 1rem;
   border: none;
@@ -46,5 +46,11 @@ body #main-div #inner-div #url-div #get-form {
 body #main-div #inner-div #url-div #get-form:hover {
   background-color: #8ecae6;
   cursor: pointer;
+}
+
+@media only screen and (max-width: 599px) {
+  iframe {
+    width: 90vw;
+  }
 }
 /*# sourceMappingURL=style.css.map */

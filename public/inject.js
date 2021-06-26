@@ -10,7 +10,7 @@ form.action = submitUrl;
 const submitButton = document.querySelector(
   '.freebirdFormviewerViewNavigationSubmitButton'
 );
-submitButton.removeAttribute('jsaction');
+// submitButton.removeAttribute('jsaction');
 submitButton.addEventListener('click', async (e) => {
   const counter = +prompt('How many time you want to submit this form?');
   if (!counter) {
