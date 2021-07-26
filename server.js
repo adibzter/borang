@@ -29,7 +29,7 @@ app.post('/form', async (req, res) => {
   res.send(htmlData);
 });
 
-app.post('/submit', (req, res) => {
+app.post('/submit', async (req, res) => {
   let body = req.body;
   const formUrl = body.url;
   let counter = +body.counter;
@@ -40,18 +40,24 @@ app.post('/submit', (req, res) => {
 
   body = new URLSearchParams(body).toString();
 
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const promises = [];
   for (let i = 0; i < counter; i++) {
-    axios({
-      method: 'POST',
-      url: formUrl,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: body,
-    }).catch((err) => {
-      console.error('Server at Google hangup');
-    });
+    await wait(50);
+    promises.push(
+      axios({
+        method: 'POST',
+        url: formUrl,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: body,
+      })
+    );
   }
+  Promise.all(promises).catch(() => {
+    console.error('Server at Google hangup');
+  });
 
   const lirik =
     'Tersergam Indah Di Pinggir Desa<br>' +
