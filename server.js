@@ -1,9 +1,7 @@
-const fs = require('fs');
 const path = require('path');
 
 const express = require('express');
 const axios = require('axios').default;
-const { url } = require('inspector');
 
 const app = express();
 
@@ -50,8 +48,11 @@ app.post('/submit', (req, res) => {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       data: body,
+    }).catch((err) => {
+      console.error('Server at Google hangup');
     });
   }
+
   const lirik =
     'Tersergam Indah Di Pinggir Desa<br>' +
     'Sekolah Tuanku Ja’afar Tercinta<br>' +
