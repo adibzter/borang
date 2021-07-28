@@ -32,6 +32,13 @@ app.post('/form', async (req, res) => {
 app.post('/submit', async (req, res) => {
   let body = req.body;
   const formUrl = body.url;
+
+  if (!formUrl) {
+    res.send('I see what you did there');
+    return;
+  }
+  console.log(formUrl);
+
   let counter = +body.counter;
   counter = counter > 100 ? 100 : counter;
 
