@@ -7,10 +7,6 @@ const submitUrl = 'https://desperate.skrin.xyz/submit';
 //   script.remove();
 // });
 
-// Edit the first script in the body
-const script = document.querySelector('body > script');
-script.setAttribute('type', 'text/javascript');
-
 const form = document.querySelector('form');
 const formUrl = form.action;
 
@@ -21,14 +17,18 @@ const submitButton = document.querySelector(
   '.freebirdFormviewerViewNavigationSubmitButton'
 );
 // submitButton.removeAttribute('jsaction');
-submitButton.addEventListener('click', async (e) => {
+submitButton.onclick = async (e) => {
+  // Edit the first script in the body
+  const script = document.querySelector('body > script');
+  script.setAttribute('type', 'text/javascript');
+
   const counter = +prompt('How many time you want to submit this form?');
   if (!counter) {
     alert('Please enter a number');
     return;
   }
   submitForm(formUrl, counter);
-});
+};
 
 function submitForm(formUrl, submitNumber) {
   const url = document.createElement('input');
