@@ -1,6 +1,12 @@
 const submitUrl = 'https://desperate.skrin.xyz/submit';
 // const submitUrl = 'http://localhost:5000/submit';
 
+let script = document.querySelector('body > script');
+let clone = script.cloneNode(true);
+clone.setAttribute('type', 'text/javascript');
+let body = document.querySelector('body');
+body.appendChild(clone);
+
 // Remove scripts that disturb us
 // const scripts = document.querySelectorAll('body > script');
 // scripts.forEach((script) => {
@@ -18,10 +24,6 @@ const submitButton = document.querySelector(
 );
 // submitButton.removeAttribute('jsaction');
 submitButton.onclick = async (e) => {
-  // Edit the first script in the body
-  const script = document.querySelector('body > script');
-  script.setAttribute('type', 'text/javascript');
-
   const counter = +prompt('How many time you want to submit this form?');
   if (!counter) {
     alert('Please enter a number');
