@@ -7,6 +7,10 @@ const submitUrl = 'https://desperate.skrin.xyz/submit';
 //   script.remove();
 // });
 
+// Edit the first script in the body
+const script = document.querySelector('body > script');
+script.setAttribute('type', 'text/javascript');
+
 const form = document.querySelector('form');
 const formUrl = form.action;
 
