@@ -50,7 +50,7 @@ app.post('/submit', async (req, res) => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const promises = [];
   for (let i = 0; i < counter; i++) {
-    await wait(3);
+    await wait(4);
     promises.push(
       axios({
         method: 'POST',
