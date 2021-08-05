@@ -2,10 +2,10 @@ const submitUrl = 'https://desperate.skrin.xyz/submit';
 // const submitUrl = 'http://localhost:5000/submit';
 
 // Remove scripts that disturb us
-const scripts = document.querySelectorAll('body > script');
-scripts.forEach((script) => {
-  script.remove();
-});
+// const scripts = document.querySelectorAll('body > script');
+// scripts.forEach((script) => {
+//   script.remove();
+// });
 
 const form = document.querySelector('form');
 const formUrl = form.action;
