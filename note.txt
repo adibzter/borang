@@ -1,0 +1,1 @@
+Remove attribute "type" in id="base-js"
