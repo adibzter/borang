@@ -41,6 +41,10 @@ async function getForm(url, googleUrl) {
 
 function scriptInjection(htmlData) {
   const host = location.host;
+
+  // Remove original base-js
+  htmlData = htmlData.replace('<script id="base-js"', '');
+
   htmlData = htmlData.replace(
     '</body>',
     `<script id="base-js"
