@@ -24,7 +24,10 @@ const submitButton = document.querySelector(
 );
 // submitButton.removeAttribute('jsaction');
 submitButton.onclick = async (e) => {
-  const counter = +prompt('How many time you want to submit this form?');
+  const str = 'How many time you want to submit this form?';
+  let counter = prompt(str);
+  counter = /^[1-9]\d*$/.exec(counter) || 1;
+
   if (!counter) {
     alert('Please enter a number');
     return;

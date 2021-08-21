@@ -34,12 +34,12 @@ app.post('/submit', async (req, res) => {
   const formUrl = body.url;
 
   if (!formUrl) {
-    res.send('I see what you did there');
+    res.send('Something went wrong. If you are using mobile, please use desktop.');
     return;
   }
   console.log(formUrl);
 
-  let counter = +body.counter;
+  let counter = +body.counter || 1;
   counter = counter > 100 ? 100 : counter;
 
   delete body.url;
@@ -50,7 +50,7 @@ app.post('/submit', async (req, res) => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const promises = [];
   for (let i = 0; i < counter; i++) {
-    await wait(5);
+    await wait(6);
     promises.push(
       axios({
         method: 'POST',
