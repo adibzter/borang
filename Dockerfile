@@ -1,4 +1,4 @@
-FROM node
+FROM node:alpine3.14
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
