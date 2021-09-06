@@ -58,7 +58,7 @@ function download(htmlData) {
   const a = document.createElement('a');
   a.style.display = 'none';
   a.href = 'data:text/html;charset=utf-8,' + encodeURIComponent(htmlData);
-  a.download = 'desperate_' + Date.now();
+  a.download = 'borang_' + Date.now();
   document.body.appendChild(a);
 
   a.click();

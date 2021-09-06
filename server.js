@@ -16,6 +16,11 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });
 
+// Privacy Policy
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public/privacy.html'));
+});
+
 // New form
 app.post('/form', async (req, res) => {
   const url = req.body.url;
