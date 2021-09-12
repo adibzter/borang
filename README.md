@@ -18,3 +18,6 @@
 
 - Install from Chrome Web Store: 
 [Borang Chrome Extension install](https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol)
+
+## Licence
+This project is licensed under the [MIT License](https://github.com/ADIBzTER/borang/blob/master/LICENSE)
