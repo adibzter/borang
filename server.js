@@ -18,30 +18,36 @@ app.get('/', (req, res) => {
 
 // New form
 app.post('/form', async (req, res) => {
-  const url = req.body.url;
+  try {
+    const url = req.body.url;
 
-  // Get form from Google
-  let htmlData = await (await axios.get(url)).data;
+    // Get form from Google
+    let htmlData = await (await axios.get(url)).data;
 
-  // const beautify = require('js-beautify').html;
-  // htmlData = beautify(htmlData, { indent_size: 2 });
+    // const beautify = require('js-beautify').html;
+    // htmlData = beautify(htmlData, { indent_size: 2 });
 
-  res.send(htmlData);
+    res.send(htmlData);
+  } catch (err) {
+    console.log('Cannot create form');
+  }
 });
 
 app.post('/submit', async (req, res) => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  let body = req.body;
-  const formUrl = body.url;
+  try {
+    let body = req.body;
+    const formUrl = body.url;
 
-  if (!formUrl) {
-    res.send(
-      'Something went wrong. If you are using mobile, please use desktop.'
-    );
-    return;
+    if (!formUrl) {
+      throw 'Something went wrong. If you are using mobile, please use desktop.';
+    }
+
+    console.log(formUrl);
+  } catch (err) {
+    res.send(err);
   }
-  console.log(formUrl);
 
   let counter = +body.counter || 1;
   counter = counter > 100 ? 100 : counter;
@@ -55,23 +61,27 @@ app.post('/submit', async (req, res) => {
 
   body = new URLSearchParams(body).toString();
 
-  const promises = [];
-  for (let i = 0; i < counter; i++) {
-    await wait(6);
-    promises.push(
-      axios({
-        method: 'POST',
-        url: formUrl,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        data: body,
-      })
-    );
+  try {
+    const promises = [];
+    for (let i = 0; i < counter; i++) {
+      await wait(15);
+      promises.push(
+        axios({
+          method: 'POST',
+          url: formUrl,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          data: body,
+        })
+      );
+    }
+    Promise.all(promises).catch(() => {
+      console.error('Server at Google hangup');
+    });
+  } catch (err) {
+    console.log('Error while spamming');
   }
-  Promise.all(promises).catch(() => {
-    console.error('Server at Google hangup');
-  });
 });
 
 app.get('*', (req, res) => {
