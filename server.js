@@ -45,23 +45,19 @@ app.post('/submit', async (req, res) => {
     }
 
     console.log(formUrl);
-  } catch (err) {
-    res.send(err);
-  }
 
-  let counter = +body.counter || 1;
-  counter = counter > 100 ? 100 : counter;
+    let counter = +body.counter || 1;
+    counter = counter > 100 ? 100 : counter;
 
-  // Send response immediately so connection can be closed
-  res.header('Connection', 'close');
-  res.send(`${counter} form(s) sent`);
+    // Send response immediately so connection can be closed
+    res.header('Connection', 'close');
+    res.send(`${counter} form(s) sent`);
 
-  delete body.url;
-  delete body.counter;
+    delete body.url;
+    delete body.counter;
 
-  body = new URLSearchParams(body).toString();
+    body = new URLSearchParams(body).toString();
 
-  try {
     const promises = [];
     for (let i = 0; i < counter; i++) {
       await wait(15);
@@ -80,7 +76,7 @@ app.post('/submit', async (req, res) => {
       console.error('Server at Google hangup');
     });
   } catch (err) {
-    console.log('Error while spamming');
+    console.log('Error', err);
   }
 });
 
