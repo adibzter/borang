@@ -36,47 +36,56 @@ app.post('/form', async (req, res) => {
 app.post('/submit', async (req, res) => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  let body = req.body;
+  const formUrl = body.url;
+  let counter = body.counter;
+
+  if (!formUrl) {
+    console.error(
+      'Something went wrong. If you are using mobile, please use desktop.'
+    );
+    return;
+  }
+
+  console.log(`Form URL: ${formUrl}`);
+
+  counter = +counter || 1;
+  counter = counter > 100 ? 100 : counter;
+
+  // Send response immediately so connection can be closed
+  res.header('Connection', 'close');
+  res.send(`${counter} form(s) sent`);
+
+  delete body.url;
+  delete body.counter;
+
   try {
-    let body = req.body;
-    const formUrl = body.url;
-
-    if (!formUrl) {
-      throw 'Something went wrong. If you are using mobile, please use desktop.';
-    }
-
-    console.log(formUrl);
-
-    let counter = +body.counter || 1;
-    counter = counter > 100 ? 100 : counter;
-
-    // Send response immediately so connection can be closed
-    res.header('Connection', 'close');
-    res.send(`${counter} form(s) sent`);
-
-    delete body.url;
-    delete body.counter;
-
     body = new URLSearchParams(body).toString();
-
-    const promises = [];
-    for (let i = 0; i < counter; i++) {
-      await wait(15);
-      promises.push(
-        axios({
-          method: 'POST',
-          url: formUrl,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          data: body,
-        })
-      );
-    }
-    Promise.all(promises).catch(() => {
-      console.error('Server at Google hangup');
-    });
   } catch (err) {
-    console.log('Error', err);
+    console.error('Cannot convert body to url search params');
+    return;
+  }
+
+  const promises = [];
+  for (let i = 0; i < counter; i++) {
+    await wait(15);
+    const promise = axios({
+      method: 'POST',
+      url: formUrl,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      data: body,
+    });
+
+    promises.push(promise);
+  }
+
+  try {
+    Promise.all(promises);
+  } catch (err) {
+    console.error('Server at Google hangup');
+    return;
   }
 });
 
