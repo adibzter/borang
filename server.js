@@ -50,11 +50,13 @@ app.post('/submit', async (req, res) => {
   console.log(`Form URL: ${formUrl}`);
 
   counter = +counter || 1;
-  counter = counter > 100 ? 100 : counter;
+  counter = counter > 15 ? 15 : counter;
 
   // Send response immediately so connection can be closed
   res.header('Connection', 'close');
-  res.send(`${counter} form(s) sent`);
+  res.send(
+    `${counter} form(s) sent. I need to limit this to 15 since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.`
+  );
 
   delete body.url;
   delete body.counter;
