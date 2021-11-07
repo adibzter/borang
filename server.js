@@ -41,15 +41,22 @@ app.post('/submit', async (req, res) => {
   let counter = body.counter;
 
   if (!formUrl) {
-    console.error(
+    res.send(
       'Something went wrong. If you are using mobile, please use desktop.'
     );
     return;
   }
 
+  try {
+    await axios.post(formUrl);
+  } catch (err) {
+    res.send("Form require login. We don't support this feature.");
+    return;
+  }
+
   console.log(`Form URL: ${formUrl}`);
 
-	limit = 15
+  limit = 15;
   counter = +counter || 1;
   counter = counter > limit ? limit : counter;
 
