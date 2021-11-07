@@ -49,13 +49,14 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
+	limit = 15
   counter = +counter || 1;
-  counter = counter > 15 ? 15 : counter;
+  counter = counter > limit ? limit : counter;
 
   // Send response immediately so connection can be closed
   res.header('Connection', 'close');
   res.send(
-    `${counter} form(s) sent. I need to limit this to 15 since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.`
+    `${counter} form(s) sent. I need to limit this to ${counter} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.`
   );
 
   delete body.url;
@@ -68,26 +69,21 @@ app.post('/submit', async (req, res) => {
     return;
   }
 
-  const promises = [];
   for (let i = 0; i < counter; i++) {
-    await wait(15);
-    const promise = axios({
-      method: 'POST',
-      url: formUrl,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      data: body,
-    });
-
-    promises.push(promise);
-  }
-
-  try {
-    Promise.all(promises);
-  } catch (err) {
-    console.error('Server at Google hangup');
-    return;
+    try {
+      axios({
+        method: 'POST',
+        url: formUrl,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        data: body,
+      });
+      await wait(10);
+    } catch (err) {
+      console.error('Server at Google hangup');
+      break;
+    }
   }
 });
 
