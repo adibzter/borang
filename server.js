@@ -47,26 +47,11 @@ app.post('/submit', async (req, res) => {
     return;
   }
 
-  try {
-    await axios.post(formUrl);
-  } catch (err) {
-    if (err.response.status === 401) {
-      res.send("Form require login. We don't support this feature.");
-      return;
-    }
-  }
-
   console.log(`Form URL: ${formUrl}`);
 
   limit = 15;
   counter = +counter || 1;
   counter = counter > limit ? limit : counter;
-
-  // Send response immediately so connection can be closed
-  res.header('Connection', 'close');
-  res.send(
-    `${counter} form(s) sent. I need to limit this to ${counter} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.`
-  );
 
   delete body.url;
   delete body.counter;
@@ -78,23 +63,51 @@ app.post('/submit', async (req, res) => {
     return;
   }
 
-  for (let i = 0; i < counter; i++) {
+  // Test if form need auth
+  try {
+    await postData(formUrl, body);
+  } catch (err) {
+    if (err.response.status === 401) {
+      res.send("Form require login. We don't support this feature.");
+    } else {
+      res.send('Error occur');
+    }
+    return;
+  }
+  // counter - 1 because we already sent 1 data above
+  for (let i = 0; i < counter - 1; i++) {
     try {
-      axios({
-        method: 'POST',
-        url: formUrl,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        data: body,
-      });
+      postData(formUrl, body);
       await wait(10);
     } catch (err) {
       console.error('Server at Google hangup');
-      break;
+      res.send(`${i + 1} forms sent. Error occured.`);
+      return;
     }
   }
+
+  res.send(
+    `${counter} form(s) sent. I need to limit this to ${limit} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.\n
+		<br><br>
+		This is an open-source project. Feel free to contribute and learn the code.
+		<br>
+		Server repo: <a href="https://github.com/ADIBzTER/borang">https://github.com/ADIBzTER/borang</a>
+		<br>
+		Chrome Extension repo: <a href="https://github.com/ADIBzTER/borang-chrome-extension">https://github.com/ADIBzTER/borang-chrome-extension</a>
+		`
+  );
 });
+
+async function postData(formUrl, body) {
+  return await axios({
+    method: 'POST',
+    url: formUrl,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    data: body,
+  });
+}
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/index.html'));
