@@ -50,8 +50,10 @@ app.post('/submit', async (req, res) => {
   try {
     await axios.post(formUrl);
   } catch (err) {
-    res.send("Form require login. We don't support this feature.");
-    return;
+    if (err.response.status === 401) {
+      res.send("Form require login. We don't support this feature.");
+      return;
+    }
   }
 
   console.log(`Form URL: ${formUrl}`);
