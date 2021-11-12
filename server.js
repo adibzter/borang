@@ -29,7 +29,9 @@ app.post('/form', async (req, res) => {
 
     res.send(htmlData);
   } catch (err) {
-    console.log('Cannot create form');
+    const string = 'Cannot create form';
+    console.log(string);
+    res.send(string);
   }
 });
 
@@ -60,6 +62,7 @@ app.post('/submit', async (req, res) => {
     body = new URLSearchParams(body).toString();
   } catch (err) {
     console.error('Cannot convert body to url search params');
+    res.send('Error occur');
     return;
   }
 
