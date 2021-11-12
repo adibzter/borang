@@ -4,21 +4,28 @@ $primary-color: #219ebc;
 $secondary-color: #8ecae6;
 
 body {
-  margin: auto 0;
+  margin: 10px 50px;
   background-color: $bg-color;
   color: $text-color;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
+  a {
+    color: yellow;
+  }
+
   #main-div {
     display: flex;
-    align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100vh;
     #inner-div {
       h1 {
         text-align: center;
       }
+
+      .red-text {
+        color: red;
+      }
+
       #url-div {
         font-size: 1.2rem;
 
@@ -50,7 +57,7 @@ body {
 }
 
 @media only screen and(max-width: 599px) {
-	iframe {
-		width: 90vw;
-	}
+  iframe {
+    width: 90vw;
+  }
 }

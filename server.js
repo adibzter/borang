@@ -92,6 +92,8 @@ app.post('/submit', async (req, res) => {
   res.send(
     `${counter} form(s) sent. I need to limit this to ${limit} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.\n
 		<br><br>
+		Don't forget to give Borang Chrome extension 5 stars <a href="https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol">here</a>
+		<br><br>
 		This is an open-source project. Feel free to contribute and learn the code.
 		<br>
 		Server repo: <a href="https://github.com/ADIBzTER/borang">https://github.com/ADIBzTER/borang</a>
