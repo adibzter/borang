@@ -6,7 +6,7 @@ const axios = require('axios').default;
 const app = express();
 
 // Body Parser Middleware
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
@@ -41,6 +41,7 @@ app.post('/submit', async (req, res) => {
   let body = req.body;
   const formUrl = body.url;
   let counter = body.counter;
+  const fromExtension = body.fromExtension;
 
   if (!formUrl) {
     res.send(
@@ -53,10 +54,14 @@ app.post('/submit', async (req, res) => {
 
   limit = 15;
   counter = +counter || 1;
-  counter = counter > limit ? limit : counter;
+
+  if (!body.fromExtension) {
+    counter = counter > limit ? limit : counter;
+  }
 
   delete body.url;
   delete body.counter;
+  delete body.fromExtension;
 
   try {
     body = new URLSearchParams(body).toString();
@@ -77,6 +82,17 @@ app.post('/submit', async (req, res) => {
     }
     return;
   }
+
+  // Request from chrome extension
+  if (fromExtension) {
+    res.send(`
+		<input type="hidden" id="formUrl" value="${formUrl}">
+		<input type="hidden" id="counter" value="${counter}">
+		<input type="hidden" id="body" value="${body}">
+		`);
+    return;
+  }
+
   // counter - 1 because we already sent 1 data above
   for (let i = 0; i < counter - 1; i++) {
     try {
@@ -92,7 +108,7 @@ app.post('/submit', async (req, res) => {
   res.send(
     `${counter} form(s) sent. I need to limit this to ${limit} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.\n
 		<br><br>
-		Don't forget to give Borang Chrome extension 5 stars <a href="https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol">here</a>
+		Use <a href="https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol" target="_blank">Borang Chrome Extension</a> for unlimited form submission and better support. Don't forget to give Borang Chrome Extension 5 stars <a href="https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol">here</a>
 		<br><br>
 		This is an open-source project. Feel free to contribute and learn the code.
 		<br>
