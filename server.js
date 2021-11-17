@@ -9,12 +9,16 @@ const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('public'));
-
 // Homepage
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/index.html'));
+  if (req.hostname === 'desperate.skrin.xyz') {
+    res.redirect(301, 'https://borang.skrin.xyz');
+  } else {
+    res.sendFile(path.resolve(__dirname, 'public/index.html'));
+  }
 });
+
+app.use(express.static('public'));
 
 // New form
 app.post('/form', async (req, res) => {
