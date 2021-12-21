@@ -66,6 +66,7 @@ app.post('/submit', async (req, res) => {
   delete body.url;
   delete body.counter;
   delete body.fromExtension;
+	delete body.dlut;
 
   try {
     body = new URLSearchParams(body).toString();
