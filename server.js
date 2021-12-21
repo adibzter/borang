@@ -94,13 +94,6 @@ app.post('/submit', async (req, res) => {
 		<input type="hidden" id="formUrl" value="${formUrl}">
 		<input type="hidden" id="counter" value="${counter}">
 		<input type="hidden" id="body" value="${body}">
-		<h1>READ THIS!
-		<br>
-		THIS EXTENSION IS NOT WORKING PROPERLY RIGHT NOW SINCE GOOGLE UPDATED THEIR SERVICE. PLEASE REMOVE THIS EXTENSION IF YOU ARE DEALING WITH IMPORTANT FORM SUCH AS UNIVERSITY QUIZ
-		<br>
-		IGNORE MESSAGE BELLOW THIS LINE
-		<br>------------------------------------------------------------------<br>
-		</h1>
 		`);
     return;
   }
