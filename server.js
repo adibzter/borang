@@ -6,7 +6,7 @@ const axios = require('axios').default;
 const app = express();
 
 // Body Parser Middleware
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Homepage
