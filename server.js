@@ -94,6 +94,7 @@ app.post('/submit', async (req, res) => {
 		<input type="hidden" id="formUrl" value="${formUrl}">
 		<input type="hidden" id="counter" value="${counter}">
 		<input type="hidden" id="body" value="${body}">
+		<h3>Can you do me a favour by subscribing my <a href="https://www.youtube.com/c/kiraa?sub_confirmation=1" target="_blank">YouTube channel</a>?<h3>
 		`);
     return;
   }
