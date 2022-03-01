@@ -94,8 +94,9 @@ app.post('/submit', async (req, res) => {
 		<input type="hidden" id="formUrl" value="${formUrl}">
 		<input type="hidden" id="counter" value="${counter}">
 		<input type="hidden" id="body" value="${body}">
-		<h3>Can you do me a favour by subscribing my <a href="https://www.youtube.com/c/kiraa?sub_confirmation=1" target="_blank">YouTube channel</a>?<h3>
+		<h3>Can you do me a favour by subscribing my <a href="https://www.youtube.com/c/kiraa?sub_confirmation=1" target="_blank">YouTube channel</a>?</h3>
 		
+		<p>
 		${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
 		<br><br>
 		Since you are using Borang Chrome extension, you can submit unlimited form in the same time. But if you send too many, your PC might freeze.
@@ -107,6 +108,7 @@ app.post('/submit', async (req, res) => {
 		Server repo: <a href="https://github.com/ADIBzTER/borang">https://github.com/ADIBzTER/borang</a>
 		<br>
 		Chrome Extension repo: <a href="https://github.com/ADIBzTER/borang-chrome-extension">https://github.com/ADIBzTER/borang-chrome-extension</a>
+		</p>
 		`);
     return;
   }
