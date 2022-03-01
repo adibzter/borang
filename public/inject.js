@@ -20,7 +20,8 @@ form.method = 'POST';
 form.action = submitUrl;
 
 const submitButton = document.querySelector(
-  '.freebirdFormviewerViewNavigationSubmitButton'
+  // '.freebirdFormviewerViewNavigationSubmitButton'
+  '.uArJ5e.UQuaGc.Y5sE8d.VkkpIf.NqnGTe'
 );
 // submitButton.removeAttribute('jsaction');
 submitButton.onclick = async (e) => {
