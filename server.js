@@ -68,11 +68,30 @@ app.post('/submit', async (req, res) => {
   delete body.fromExtension;
   delete body.dlut;
 
+  // Extract checkboxes
+  const checkboxes = {};
+  for (let name in body) {
+    const value = body[name];
+
+    if (Array.isArray(value)) {
+      checkboxes[name] = value;
+      delete body[name];
+    }
+  }
+
   try {
-    body = new URLSearchParams(body).toString();
+    body = new URLSearchParams(body);
+
+    // Add checkboxes data into body
+    for (let name in checkboxes) {
+      const checkbox = checkboxes[name];
+      for (let value of checkbox) {
+        body.append(name, value);
+      }
+    }
+    body = body.toString();
   } catch (err) {
-    console.error('Cannot convert body to url search params');
-    res.send('Error occur');
+    res.send('Error: Cannot convert body to url search params');
     return;
   }
 
@@ -81,9 +100,9 @@ app.post('/submit', async (req, res) => {
     await postData(formUrl, body);
   } catch (err) {
     if (err.response.status === 401) {
-      res.send("Form require login. We don't support this feature.");
+      res.send("Error: Form require login. We don't support this feature.");
     } else {
-      res.send('Error occur');
+      res.send('Error: Cannot post data');
     }
     return;
   }
