@@ -2,12 +2,14 @@ const path = require('path');
 
 const express = require('express');
 const axios = require('axios').default;
+const compression = require('compression');
 
 const app = express();
 
-// Body Parser Middleware
+// Middlewares
 app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(compression({ level: 9, memLevel: 9 }));
 
 // Homepage
 app.get('/', (req, res) => {
