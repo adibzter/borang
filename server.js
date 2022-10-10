@@ -58,7 +58,8 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  limit = 15;
+  let limit = 15;
+	let waitTime = 20 // ms
   counter = +counter || 1;
 
   if (!body.fromExtension) {
@@ -120,28 +121,80 @@ app.post('/submit', async (req, res) => {
   };
   if (fromExtension) {
     res.send(`
-		<input type="hidden" id="formUrl" value="${formUrl}">
-		<input type="hidden" id="counter" value="${counter}">
-		<input type="hidden" id="body" value="${body}">
-		<h3>Can you do me a favour by subscribing my <a href="${urls.subscribeYoutube}" target="_blank">YouTube channel</a>?</h3>
-		
-		<p>
-		${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
-		<br><br>
-		Since you are using Borang Chrome extension, you can submit unlimited form in the same time. But if you send too many, your PC might freeze.
-		<br><br>
-		Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}" target="_blank">Chrome Web Store</a>
-		<br><br>
-		This is an open-source project. Feel free to contribute and learn the code.
-		<br>
-		Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
-		<br>
-		Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
-		</p>
+		<head>
+			<meta charset="UTF-8">
+			<meta http-equiv="X-UA-Compatible" content="IE=edge">
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<link rel="stylesheet" href="bootstrap.min.css">
+			<script src="bootstrap.min.js"></script>
 
-		<br/>
-		<p>If you are from Malaysia, you can support me by donating through my DuitNow QR :)</p>
-		<img src="${urls.duitnow}" alt="duitnow-qr"/>
+			<title>Borang | Submit</title>
+		</head>
+
+		<body>
+			<input type="hidden" id="formUrl" value="${formUrl}">
+			<input type="hidden" id="counter" value="${counter}">
+			<input type="hidden" id="body" value="${body}">
+			<input type="hidden" id="waitTime" value="${waitTime}">
+			<h3>Can you do me a favour by subscribing my <a href="${urls.subscribeYoutube}" target="_blank">YouTube channel</a>?</h3>
+			
+			<p>
+			${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
+			<br><br>
+			Since you are using Borang Chrome extension, you can submit unlimited form in the same time. But if you send too many, your PC might freeze.
+			<br><br>
+			Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}" target="_blank">Chrome Web Store</a>
+			<br><br>
+			This is an open-source project. Feel free to contribute and learn the code.
+			<br>
+			Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
+			<br>
+			Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
+			</p>
+
+			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#donate-modal">
+				Donate
+			</button>
+
+			<div class="modal fade" id="donate-modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="donate-modal"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5">Donation</h1>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body" style="text-align: center">
+							<p>This software is free to use but the maintenance is not. Consider donating some of your money to help
+								me maintain this software & server fee.
+							</p>
+							<img id="duitnow-img" src="${urls.duitnow}" alt="duitnow-qr" style="width: 90%" hidden/>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onclick="donate()">Donate</button>
+							<button type="button" class="btn btn-primary" onclick="showQr()">DuitNow QR (Malaysia)</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				window.onload = e => {
+					let donateModal = document.querySelector('#donate-modal');
+					donateModal = new bootstrap.Modal(donateModal);
+					donateModal.show();
+				}
+
+				function donate() {
+					window.open('https://donate.stripe.com/7sI5kZ22L78C8xy28c', '_blank').focus();
+				}
+
+				function showQr() {
+					let img = document.querySelector('#duitnow-img');
+					img.removeAttribute('hidden');
+				}
+			</script>
+		</body>
 		`);
     return;
   }
@@ -186,6 +239,10 @@ async function postData(formUrl, body) {
     data: body,
   });
 }
+
+app.get('/test', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public/test.html'));
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'public/index.html'));
