@@ -6,10 +6,6 @@
 
 - This repo is for Borang's web-app.
 
-- Current site: [desperate.skrin.xyz](https://desperate.skrin.xyz)
-
-- We are planning to move to: [borang.skrin.xyz](https://borang.skrin.xyz)
-
 ## Chrome extension
 - We also provide Chrome Extension which more powerful
 
