@@ -58,13 +58,14 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  let limit = 15;
-	let waitTime = 20 // ms
+  let limit = 100;
+  let waitTime = 20; // ms
   counter = +counter || 1;
 
-  if (!body.fromExtension) {
-    counter = counter > limit ? limit : counter;
-  }
+  // if (!body.fromExtension) {
+  //   counter = counter > limit ? limit : counter;
+  // }
+  counter = counter > limit ? limit : counter;
 
   delete body.url;
   delete body.counter;
@@ -140,8 +141,10 @@ app.post('/submit', async (req, res) => {
 			
 			<p>
 			${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
+			<br>
+			Please share about this extension to media social with hashtag <b>#borang<b> and tell them what you use this extension for.
 			<br><br>
-			Since you are using Borang Chrome extension, you can submit unlimited form in the same time. But if you send too many, your PC might freeze.
+			We are limiting response to ${limit} to reduce payment for server. After we get a good amount of donation, we will lift the limit.
 			<br><br>
 			Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}" target="_blank">Chrome Web Store</a>
 			<br><br>
@@ -165,8 +168,8 @@ app.post('/submit', async (req, res) => {
 							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 						</div>
 						<div class="modal-body" style="text-align: center">
-							<p>This software is free to use but the maintenance is not. Consider donating some of your money to help
-								me maintain this software & server fee.
+							<p>
+								Help us to maintain this project by donating as low as $2. The more is better.
 							</p>
 							<img id="duitnow-img" src="${urls.duitnow}" alt="duitnow-qr" style="width: 90%" hidden/>
 						</div>
