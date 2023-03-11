@@ -142,7 +142,7 @@ app.post('/submit', async (req, res) => {
 			<p>
 			${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
 			<br>
-			Please share about this extension to media social with hashtag <b>#borang<b> and tell them what you use this extension for.
+			Please share about this extension to media social with hashtag <b>#borang</b> and tell them what you use this extension for.
 			<br><br>
 			We are limiting response to ${limit} to reduce payment for server. After we get a good amount of donation, we will lift the limit.
 			<br><br>
