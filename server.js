@@ -122,10 +122,34 @@ app.post('/submit', async (req, res) => {
   };
   if (fromExtension) {
     res.send(`
-		<head>
-			<meta charset="UTF-8">
-			<meta http-equiv="X-UA-Compatible" content="IE=edge">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        div.logo {
+            border: 1.5px solid black;
+            width: 190px;
+            border-radius: 5px;
+            margin: auto;
+        }
+
+        div.logo>img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+    </style>
 			<link rel="stylesheet" href="bootstrap.min.css">
 			<script src="bootstrap.min.js"></script>
 
@@ -137,28 +161,60 @@ app.post('/submit', async (req, res) => {
 			<input type="hidden" id="counter" value="${counter}">
 			<input type="hidden" id="body" value="${body}">
 			<input type="hidden" id="waitTime" value="${waitTime}">
-			<h3>Can you do me a favour by subscribing my <a href="${urls.subscribeYoutube}" target="_blank">YouTube channel</a>?</h3>
-			
-			<p>
-			${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before closing this tab.
-			<br>
-			Please share about this extension to media social with hashtag <b>#borang</b> and tell them what you use this extension for.
-			<br><br>
-			We are limiting response to ${limit} to reduce payment for server. After we get a good amount of donation, we will lift the limit.
-			<br><br>
-			Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}" target="_blank">Chrome Web Store</a>
-			<br><br>
-			This is an open-source project. Feel free to contribute and learn the code.
-			<br>
-			Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
-			<br>
-			Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
-			</p>
+	 <section>
+        <div class="container">
+            <div>
+                <div class="d-flex align-items-center justify-content-center logo py-1 mb-5">
+                    <img src="Borang.jpg" alt="">
+                    <h2>Borang</h2>
+                </div>
+            </div>
+            <div class="card p-3">
+                <div>
+                    <h3 class="bg-warning p-2 rounded-2">Can you do me a favour by subscribing my <a
+                            href="${urls.subscribeYoutube}" target="_blank">YouTube
+                            channel</a>?
+                    </h3>
 
-			<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#donate-modal">
-				Donate
-			</button>
+                    <p>
+                        ${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before
+                        closing
+                        this tab.
+                        <br>
+                        Please share about this extension to media social with hashtag <b>#borang</b> and tell them what
+                        you
+                        use
+                        this
+                        extension for.
+                        <br><br>
+                        We are limiting response to ${limit} to reduce payment for server. After we get a good amount of
+                        donation, we
+                        will
+                        lift the limit.
+                        <br><br>
+                        Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}"
+                            target="_blank">Chrome
+                            Web
+                            Store</a>
+                        <br><br>
+                        This is an open-source project. Feel free to contribute and learn the code.
+                        <br>
+                        Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
+                        <br>
+                        Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
+                    </p>
 
+                    <div class="d-flex justify-content-between">
+                        <div></div>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#donate-modal">
+                            Donate Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 			<div class="modal fade" id="donate-modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="donate-modal"
 				aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered">
