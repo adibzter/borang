@@ -225,7 +225,7 @@ app.post('/submit', async (req, res) => {
 						</div>
 						<div class="modal-body" style="text-align: center">
 							<p>
-								Help us to maintain this project by donating as low as $2. The more is better.
+								Your form has been submitted. Help us to maintain this project by donating as low as $2. The more is better.
 							</p>
 							<img id="duitnow-img" src="${urls.duitnow}" alt="duitnow-qr" style="width: 90%" hidden/>
 						</div>
