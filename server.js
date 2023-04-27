@@ -242,7 +242,7 @@ app.post('/submit', async (req, res) => {
 				window.onload = e => {
 					let donateModal = document.querySelector('#donate-modal');
 					donateModal = new bootstrap.Modal(donateModal);
-					donateModal.show();
+					//donateModal.show();
 				}
 
 				function donate() {
