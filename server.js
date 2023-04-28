@@ -58,7 +58,7 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  let limit = 100000;
+  let limit = 1000;
   let waitTime = 20; // ms
   counter = +counter || 1;
 
@@ -100,16 +100,16 @@ app.post('/submit', async (req, res) => {
   }
 
   // Test if form need auth
-  try {
-    await postData(formUrl, body);
-  } catch (err) {
-    if (err.response.status === 401) {
-      res.send("Error: Form require login. We don't support this feature.");
-    } else {
-      res.send('Error: Cannot post data');
-    }
-    return;
-  }
+//   try {
+//     await postData(formUrl, body);
+//   } catch (err) {
+//     if (err.response.status === 401) {
+//       res.send("Error: Form require login. We don't support this feature.");
+//     } else {
+//       res.send('Error: Cannot post data');
+//     }
+//     return;
+//   }
 
   // Request from chrome extension
   const urls = {
