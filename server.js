@@ -259,8 +259,9 @@ app.post('/submit', async (req, res) => {
     return;
   }
 
-  // counter - 1 because we already sent 1 data above
-  for (let i = 0; i < counter - 1; i++) {
+  // counter - 1 because we already sent 1 data above | UPDATE: remove -1 due because we don't send 1 data anymore
+  // for (let i = 0; i < counter - 1; i++) {
+  for (let i = 0; i < counter; i++) {
     try {
       postData(formUrl, body);
       await wait(10);
