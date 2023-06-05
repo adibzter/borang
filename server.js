@@ -113,6 +113,7 @@ app.post('/submit', async (req, res) => {
 
   // Request from chrome extension
   const urls = {
+    stripe: 'https://donate.stripe.com/7sI5kZ22L78C8xy28c',
     duitnow: 'https://storage.googleapis.com/sejarah-bot/duitnow.png',
     subscribeYoutube: 'https://www.youtube.com/c/kiraa?sub_confirmation=1',
     extensionChromeStore:
@@ -211,6 +212,9 @@ app.post('/submit', async (req, res) => {
                             data-bs-target="#donate-modal">
                             Donate Now
                         </button>
+                        <button type="button" class="btn btn-primary" onclick="privacyPolicy()">
+                            Privacy Policy
+                        </button>
                     </div>
                 </div>
             </div>
@@ -228,7 +232,6 @@ app.post('/submit', async (req, res) => {
 							<p>
 								Your form has been submitted. Help us to maintain this project by donating as low as $2. The more is better.
 							</p>
-							<img id="duitnow-img" src="${urls.duitnow}" alt="duitnow-qr" style="width: 90%" hidden/>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-primary" onclick="donate()">Donate</button>
@@ -246,12 +249,15 @@ app.post('/submit', async (req, res) => {
 				}
 
 				function donate() {
-					window.open('https://donate.stripe.com/7sI5kZ22L78C8xy28c', '_blank').focus();
+					window.open('${urls.stripe}', '_blank').focus();
 				}
 
 				function showQr() {
-					let img = document.querySelector('#duitnow-img');
-					img.removeAttribute('hidden');
+					window.open('/qr', '_blank').focus();
+				}
+
+				function privacyPolicy() {
+					window.open('/privacy', '_blank').focus();
 				}
 			</script>
 		</body>
@@ -301,8 +307,16 @@ async function postData(formUrl, body) {
   });
 }
 
-app.get('/test', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/test.html'));
+app.get('/qr', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public/qr.html'));
+});
+
+app.get('/donate', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public/donate.html'));
+});
+
+app.get('/privacy', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'public/privacy.html'));
 });
 
 app.get('*', (req, res) => {
