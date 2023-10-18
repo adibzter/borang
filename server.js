@@ -11,16 +11,7 @@ app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression({ level: 9, memLevel: 9 }));
 
-// Homepage
-app.get('/', (req, res) => {
-  if (req.hostname === 'desperate.skrin.xyz') {
-    res.redirect(301, 'https://borang.skrin.xyz');
-  } else {
-    res.sendFile(path.resolve(__dirname, 'public/index.html'));
-  }
-});
-
-app.use(express.static('public'));
+app.use(express.static('./client/dist'));
 
 // New form
 app.post('/form', async (req, res) => {
@@ -100,16 +91,16 @@ app.post('/submit', async (req, res) => {
   }
 
   // Test if form need auth
-//   try {
-//     await postData(formUrl, body);
-//   } catch (err) {
-//     if (err.response.status === 401) {
-//       res.send("Error: Form require login. We don't support this feature.");
-//     } else {
-//       res.send('Error: Cannot post data');
-//     }
-//     return;
-//   }
+  //   try {
+  //     await postData(formUrl, body);
+  //   } catch (err) {
+  //     if (err.response.status === 401) {
+  //       res.send("Error: Form require login. We don't support this feature.");
+  //     } else {
+  //       res.send('Error: Cannot post data');
+  //     }
+  //     return;
+  //   }
 
   // Request from chrome extension
   const urls = {
@@ -317,19 +308,24 @@ async function postData(formUrl, body) {
 }
 
 app.get('/qr', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/qr.html'));
+  res.sendFile(path.resolve(__dirname, './client/dist/qr.html'));
 });
 
 app.get('/donate', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/donate.html'));
+  res.sendFile(path.resolve(__dirname, './client/dist/donate.html'));
 });
 
 app.get('/privacy', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/privacy.html'));
+  res.sendFile(path.resolve(__dirname, './client/dist/privacy.html'));
 });
 
+// Homepage
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/index.html'));
+  if (req.hostname === 'desperate.skrin.xyz') {
+    res.redirect(301, 'https://borang.skrin.xyz');
+  } else {
+    res.sendFile(path.resolve(__dirname, './client/dist/index.html'));
+  }
 });
 
 const PORT = process.env.PORT || 5000;

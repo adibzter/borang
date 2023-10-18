@@ -6,7 +6,7 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import { firebaseConfig } from '../../../config';
+import { firebaseConfig } from '../../../secrets/config';
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);

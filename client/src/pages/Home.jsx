@@ -62,7 +62,7 @@ const Home = () => {
               startIcon={<FontAwesomeIcon icon={faGithub} />}
               onClick={() =>
                 openNewTab(
-                  'https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol'
+                  'https://github.com/adibzter/borang'
                 )
               }
             >
