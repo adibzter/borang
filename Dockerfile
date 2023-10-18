@@ -1,4 +1,4 @@
-FROM node:16.8.0-alpine3.13
+FROM node:18-alpine3.17
 
 # Copy application dependency manifests to the container image.
 # A wildcard is used to ensure copying both package.json AND package-lock.json (when available).
@@ -9,6 +9,12 @@ COPY package*.json ./
 # If you add a package-lock.json, speed your build by switching to 'npm ci'.
 RUN npm ci --only=production
 # RUN npm install --only=production
+
+WORKDIR client
+RUN yarn
+RUN yarn build
+
+WORKDIR ..
 
 # Copy local code to the container image.
 COPY . ./
