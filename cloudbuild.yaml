@@ -6,7 +6,6 @@ steps:
   args:
   - '-c'
   - |
-    mkdir secrets
     echo "$$SKRIN_BORANG_CONFIG" > secrets/config.js
 
 # Build the container image
