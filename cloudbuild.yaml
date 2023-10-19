@@ -23,7 +23,7 @@ images:
 - 'gcr.io/$PROJECT_ID/borang-dev:$COMMIT_SHA'
 availableSecrets:
   secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/skrin-borang-config/versions/latest
+  - versionName: projects/$PROJECT_ID/secrets/skrin-borang-config/versions/1
     env: 'SKRIN_BORANG_CONFIG'
 options:
   logging: CLOUD_LOGGING_ONLY
