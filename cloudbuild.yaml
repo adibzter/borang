@@ -6,7 +6,8 @@ steps:
   args:
   - '-c'
   - |
-    echo "$$SKRIN_BORANG_CONFIG" 
+    mkdir secrets
+    echo "$$SKRIN_BORANG_CONFIG" > secrets/config.js
 
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
