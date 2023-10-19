@@ -1,4 +1,13 @@
 steps:
+# Setup the secrets
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: '/bin/bash'
+  secretEnv: ['SKRIN_BORANG_CONFIG']
+  args:
+  - '-c'
+  - |
+    echo "$$SKRIN_BORANG_CONFIG" 
+
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/borang-dev:$COMMIT_SHA', '.']
