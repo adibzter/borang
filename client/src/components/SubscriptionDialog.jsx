@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -8,8 +8,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
-import { addSubscription } from '../utils/firebase';
+import { addSubscription, signIn } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -17,14 +18,36 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 export default function AlertDialogSlide() {
   const [open, setOpen] = useState(false);
+  const [isSignInLoading, setIsButtonLoading] = useState(false);
 
-  const [userEmail] = useUserStore((state) => [state.userEmail]);
+  const [userEmail, setUserEmail, setUserDisplayName, setUserPhotoUrl] =
+    useUserStore((state) => [
+      state.userEmail,
+      state.setUserEmail,
+      state.setUserDisplayName,
+      state.setUserPhotoUrl,
+    ]);
+
+  useEffect(() => {
+    console.log(userEmail);
+  }, [userEmail]);
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleGoPremium = async () => {
+    setIsButtonLoading(true);
+    if (!userEmail) {
+      const userCredential = await signIn();
+
+      if (!userCredential) return;
+      setUserEmail(userCredential.user.email);
+      setUserDisplayName(userCredential.user.displayName);
+      setUserPhotoUrl(userCredential.user.photoURL);
+    }
+    window.location.href = `https://buy.stripe.com/test_7sIbLa1BQ08EbeM6op?prefilled_email=${userEmail}`;
+
     // await addSubscription(userEmail);
     // setOpen(false);
   };
@@ -59,6 +82,7 @@ export default function AlertDialogSlide() {
             <h3>You will get:</h3>
             <ul>
               <li>Unlimited form submission</li>
+              <li>No ads</li>
             </ul>
             <hr />
             <h3>Soon...</h3>
@@ -70,7 +94,7 @@ export default function AlertDialogSlide() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button
+          <LoadingButton
             variant='contained'
             color='secondary'
             startIcon={
@@ -81,10 +105,11 @@ export default function AlertDialogSlide() {
               />
             }
             onClick={handleGoPremium}
+            loading={isSignInLoading}
             disabled
           >
-            Go Premium
-          </Button>
+            {!userEmail ? 'Sign in to Go Premium' : 'Go Premium'}
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </>

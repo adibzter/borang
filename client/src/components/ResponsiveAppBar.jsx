@@ -18,6 +18,7 @@ import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
 import { Link } from 'react-router-dom';
+import BadgesPopover from './BadgesPopover';
 
 const pages = [
   {
@@ -40,16 +41,17 @@ const pages = [
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
   const [isGoogleSignInLoading, setIsSignInLoading] = useState(false);
 
   const [
+    userEmail,
     userPhotoUrl,
     userDisplayName,
     setUserEmail,
     setUserDisplayName,
     setUserPhotoUrl,
   ] = useUserStore((state) => [
+    state.userEmail,
     state.userPhotoUrl,
     state.userDisplayName,
     state.setUserEmail,
@@ -61,7 +63,6 @@ function ResponsiveAppBar() {
     (async () => {
       const user = await getCurrentUser();
       if (user) {
-        setIsSignedIn(true);
         setUserEmail(user.email);
         setUserDisplayName(user.displayName);
         setUserPhotoUrl(user.photoURL);
@@ -80,13 +81,17 @@ function ResponsiveAppBar() {
   const handleSignIn = async () => {
     setIsSignInLoading(true);
     await signIn();
+
     setIsSignInLoading(false);
   };
 
   const handleSignOut = async () => {
     setIsSignInLoading(true);
     await signOut();
-    setIsSignedIn(false);
+
+    setUserEmail(null);
+    setUserDisplayName(null);
+    setUserPhotoUrl(null);
     setIsSignInLoading(false);
   };
 
@@ -177,8 +182,12 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
+          <Box sx={{ flexGrow: 0, marginRight: 2 }}>
+            <BadgesPopover />
+          </Box>
+
           <Box sx={{ flexGrow: 0 }}>
-            {!isSignedIn ? (
+            {!userEmail ? (
               <LoadingButton
                 variant='outlined'
                 startIcon={<FontAwesomeIcon icon={faGoogle} />}

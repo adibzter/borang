@@ -26,9 +26,10 @@ export const signIn = async () => {
   const auth = getAuth();
 
   try {
-    await signInWithPopup(auth, provider);
+    return await signInWithPopup(auth, provider);
   } catch (error) {
     console.error(error);
+    return null;
   }
 };
 
