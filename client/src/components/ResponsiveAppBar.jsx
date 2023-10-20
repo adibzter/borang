@@ -157,12 +157,22 @@ function ResponsiveAppBar() {
                 to={`/${page.id}`}
                 style={{ textDecoration: 'none' }}
               >
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'black', display: 'block' }}
-                >
-                  {page.display}
-                </Button>
+                {`/${page.id}` === window.location.pathname ? (
+                  <Button
+                    variant='outlined'
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'black', display: 'block' }}
+                  >
+                    {page.display}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'black', display: 'block' }}
+                  >
+                    {page.display}
+                  </Button>
+                )}
               </Link>
             ))}
           </Box>
