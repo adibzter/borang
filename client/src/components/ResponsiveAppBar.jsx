@@ -17,13 +17,29 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
+import { Link } from 'react-router-dom';
 
-const pages = ['Products', 'Pricing', 'About', 'Privacy Policy'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = [
+  {
+    id: 'products',
+    display: 'Products',
+  },
+  {
+    id: 'pricing',
+    display: 'Pricing',
+  },
+  {
+    id: 'about',
+    display: 'About',
+  },
+  {
+    id: 'privacy',
+    display: 'Privacy Policy',
+  },
+];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isGoogleSignInLoading, setIsSignInLoading] = useState(false);
 
@@ -59,10 +75,6 @@ function ResponsiveAppBar() {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const handleSignIn = async () => {
@@ -117,10 +129,16 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign='center' color='black'>
-                    {page}
-                  </Typography>
+                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
+                  <Link
+                    key={page.id}
+                    to={`/${page.id}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Typography textAlign='center' color='black'>
+                      {page.display}
+                    </Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -134,13 +152,18 @@ function ResponsiveAppBar() {
           ></Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block' }}
+              <Link
+                key={page.id}
+                to={`/${page.id}`}
+                style={{ textDecoration: 'none' }}
               >
-                {page}
-              </Button>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'black', display: 'block' }}
+                >
+                  {page.display}
+                </Button>
+              </Link>
             ))}
           </Box>
 
@@ -173,28 +196,6 @@ function ResponsiveAppBar() {
                 </LoadingButton>
               </Tooltip>
             )}
-            <Menu
-              sx={{ mt: '45px' }}
-              id='menu-appbar'
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign='center'>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
         </Toolbar>
       </Container>

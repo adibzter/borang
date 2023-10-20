@@ -18,7 +18,7 @@ const Home = () => {
         justifyContent='center'
         alignItems='center'
         flexDirection='column'
-        minHeight='100vh'
+        minHeight='90vh'
       >
         <h2>Borang Chrome Extension</h2>
         <iframe
@@ -60,11 +60,7 @@ const Home = () => {
               style={{ marginRight: 2 }}
               variant='outlined'
               startIcon={<FontAwesomeIcon icon={faGithub} />}
-              onClick={() =>
-                openNewTab(
-                  'https://github.com/adibzter/borang'
-                )
-              }
+              onClick={() => openNewTab('https://github.com/adibzter/borang')}
             >
               Web App
             </Button>
