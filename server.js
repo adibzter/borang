@@ -307,18 +307,6 @@ async function postData(formUrl, body) {
   });
 }
 
-app.get('/qr', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist/qr.html'));
-});
-
-app.get('/donate', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist/donate.html'));
-});
-
-app.get('/privacy', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist/privacy.html'));
-});
-
 // Homepage
 app.get('*', (req, res) => {
   if (req.hostname === 'desperate.skrin.xyz') {
