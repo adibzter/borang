@@ -5,7 +5,11 @@
   "main": "server.js",
   "scripts": {
     "start": "node server",
-    "dev": "nodemon server"
+    "server": "nodemon server",
+    "client": "yarn --cwd ./client dev",
+    "dev": "concurrently \"yarn run server\" \"yarn run client\"",
+    "install-client": "yarn --cwd ./client install",
+    "build-client": "yarn --cwd ./client build"
   },
   "author": "Adib Zaini",
   "license": "MIT",
@@ -13,9 +17,11 @@
     "axios": "^1.5.1",
     "compression": "^1.7.4",
     "express": "^4.18.2",
+    "firebase-admin": "^11.11.0",
     "js-beautify": "^1.14.9"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "nodemon": "^3.0.1"
   }
 }
