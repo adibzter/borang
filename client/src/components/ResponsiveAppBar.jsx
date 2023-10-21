@@ -41,22 +41,25 @@ const pages = [
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [isGoogleSignInLoading, setIsSignInLoading] = useState(false);
 
   const [
     userEmail,
     userPhotoUrl,
     userDisplayName,
+    isSignInLoading,
     setUserEmail,
     setUserDisplayName,
     setUserPhotoUrl,
+    setIsSignInLoading,
   ] = useUserStore((state) => [
     state.userEmail,
     state.userPhotoUrl,
     state.userDisplayName,
+    state.isSignInLoading,
     state.setUserEmail,
     state.setUserDisplayName,
     state.setUserPhotoUrl,
+    state.setIsSignInLoading,
   ]);
 
   useEffect(() => {
@@ -68,7 +71,7 @@ function ResponsiveAppBar() {
         setUserPhotoUrl(user.photoURL);
       }
     })();
-  }, [isGoogleSignInLoading]);
+  }, [isSignInLoading]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -98,7 +101,11 @@ function ResponsiveAppBar() {
   return (
     <AppBar
       position='fixed'
-      style={{ background: 'transparent', boxShadow: 'none' }}
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        boxShadow: 'none',
+        backdropFilter: 'blur(3px)',
+      }}
     >
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
@@ -182,19 +189,21 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0, marginRight: 2 }}>
-            <BadgesPopover />
-          </Box>
+          {userEmail && (
+            <Box sx={{ flexGrow: 0, marginRight: 2 }}>
+              <BadgesPopover />
+            </Box>
+          )}
 
           <Box sx={{ flexGrow: 0 }}>
             {!userEmail ? (
               <LoadingButton
                 variant='outlined'
                 startIcon={<FontAwesomeIcon icon={faGoogle} />}
-                loading={isGoogleSignInLoading}
+                loading={isSignInLoading}
                 onClick={handleSignIn}
               >
-                Sign in with Google
+                Sign in
               </LoadingButton>
             ) : (
               <Tooltip title={`Sign out from ${userDisplayName}`}>
@@ -208,7 +217,7 @@ function ResponsiveAppBar() {
                       sx={{ width: 24, height: 24 }}
                     />
                   }
-                  loading={isGoogleSignInLoading}
+                  loading={isSignInLoading}
                   onClick={handleSignOut}
                 >
                   Sign Out

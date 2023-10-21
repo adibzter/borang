@@ -13,11 +13,7 @@ const LogoAppBar = ({ display }) => {
         justifySelf: 'center',
       }}
     >
-      <Avatar
-        variant='square'
-        src='/favicon.ico'
-        sx={{ display, mr: 1 }}
-      ></Avatar>
+      <Avatar variant='square' src='/favicon.ico' sx={{ display }}></Avatar>
       <Typography
         variant='h6'
         noWrap
