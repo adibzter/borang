@@ -2,12 +2,8 @@ FROM node:18-alpine3.17
 
 COPY . ./
 
-RUN npm ci --only=production
-
-WORKDIR client
-RUN yarn
-RUN yarn build
-
-WORKDIR ..
+RUN yarn install --production --frozen-lockfile
+RUN yarn install-client
+RUN yarn build-client
 
 CMD [ "npm", "start" ]
