@@ -2,7 +2,7 @@ steps:
 # Setup the secrets
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: '/bin/bash'
-  secretEnv: ['SKRIN_BORANG_CONFIG','SKRIN_FIREBASE_SERVICE_ACCOUNT']
+  secretEnv: ['SKRIN_FIREBASE_SERVICE_ACCOUNT', 'SKRIN_BORANG_CONFIG']
   args:
   - '-c'
   - |
@@ -32,9 +32,9 @@ images:
 - 'gcr.io/$PROJECT_ID/borang-dev:$COMMIT_SHA'
 availableSecrets:
   secretManager:
-  - versionName: projects/$PROJECT_ID/secrets/skrin-borang-config/versions/latest
-    env: 'SKRIN_BORANG_CONFIG'
   - versionName: projects/$PROJECT_ID/secrets/skrin-firebase-service-account/versions/latest
     env: 'SKRIN_FIREBASE_SERVICE_ACCOUNT'
+  - versionName: projects/$PROJECT_ID/secrets/skrin-borang-config/versions/latest
+    env: 'SKRIN_BORANG_CONFIG'
 options:
   logging: CLOUD_LOGGING_ONLY
