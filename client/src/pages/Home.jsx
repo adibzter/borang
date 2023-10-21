@@ -31,7 +31,7 @@ const Home = () => {
         flexDirection='column'
         minHeight='90vh'
       >
-        <button onClick={handleLog}>sfdsfd</button>
+        {/* <button onClick={handleLog}>sfdsfd</button> */}
         <h2>Borang Chrome Extension</h2>
         <iframe
           width='560'

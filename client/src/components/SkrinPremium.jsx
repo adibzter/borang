@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react';
 const SkrinPremiumSubDescription = () => {
   return (
     <>
-      <p>You will get premium features for ALL of our products</p>
+      <p>With only <s>$9.99</s> $4.99, you will get premium features for <b>ALL</b> of our products</p>
       <Box sx={{ textAlign: 'left' }}>
         <b>Borang</b>
         <ul>
@@ -70,10 +70,10 @@ const SkrinPremium = () => {
 
     if (!userEmail) {
       const userCredential = await signIn();
+      setIsSignInLoading(false);
 
       if (!userCredential) {
         setIsClicked(false);
-        setIsSignInLoading(false);
         return;
       }
       setUserEmail(userCredential.user.email);
@@ -86,7 +86,7 @@ const SkrinPremium = () => {
     <>
       <Pricing
         title='Skrin Premium'
-        description='Get premium features'
+        description='Early Adopter Price'
         price={4.99}
         color={purple['400']}
         subDescription={<SkrinPremiumSubDescription />}
@@ -103,6 +103,7 @@ const SkrinPremium = () => {
             }
             onClick={handleSkrinPremium}
             loading={isSignInLoading}
+            disabled
           >
             Skrin Premium
           </LoadingButton>
