@@ -7,10 +7,10 @@ const Donate = () => {
       <ResponsiveAppBar />
       <Box
         component='main'
-        display='flex'
-        justifyContent='center'
-        minHeight='90vh'
         alignItems='center'
+        justifyContent='center'
+        display='flex'
+        minHeight='90vh'
         flexDirection='column'
       >
         <h1>💗Thanks For the Donation💗</h1>

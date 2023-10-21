@@ -18,6 +18,7 @@ import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
 import { Link } from 'react-router-dom';
+import BadgesPopover from './BadgesPopover';
 
 const pages = [
   {
@@ -40,34 +41,37 @@ const pages = [
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-  const [isGoogleSignInLoading, setIsSignInLoading] = useState(false);
 
   const [
+    userEmail,
     userPhotoUrl,
     userDisplayName,
+    isSignInLoading,
     setUserEmail,
     setUserDisplayName,
     setUserPhotoUrl,
+    setIsSignInLoading,
   ] = useUserStore((state) => [
+    state.userEmail,
     state.userPhotoUrl,
     state.userDisplayName,
+    state.isSignInLoading,
     state.setUserEmail,
     state.setUserDisplayName,
     state.setUserPhotoUrl,
+    state.setIsSignInLoading,
   ]);
 
   useEffect(() => {
     (async () => {
       const user = await getCurrentUser();
       if (user) {
-        setIsSignedIn(true);
         setUserEmail(user.email);
         setUserDisplayName(user.displayName);
         setUserPhotoUrl(user.photoURL);
       }
     })();
-  }, [isGoogleSignInLoading]);
+  }, [isSignInLoading]);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -80,20 +84,28 @@ function ResponsiveAppBar() {
   const handleSignIn = async () => {
     setIsSignInLoading(true);
     await signIn();
+
     setIsSignInLoading(false);
   };
 
   const handleSignOut = async () => {
     setIsSignInLoading(true);
     await signOut();
-    setIsSignedIn(false);
+
+    setUserEmail(null);
+    setUserDisplayName(null);
+    setUserPhotoUrl(null);
     setIsSignInLoading(false);
   };
 
   return (
     <AppBar
       position='fixed'
-      style={{ background: 'transparent', boxShadow: 'none' }}
+      style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        boxShadow: 'none',
+        backdropFilter: 'blur(3px)',
+      }}
     >
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
@@ -157,25 +169,41 @@ function ResponsiveAppBar() {
                 to={`/${page.id}`}
                 style={{ textDecoration: 'none' }}
               >
-                <Button
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'black', display: 'block' }}
-                >
-                  {page.display}
-                </Button>
+                {`/${page.id}` === window.location.pathname ? (
+                  <Button
+                    variant='outlined'
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'black', display: 'block' }}
+                  >
+                    {page.display}
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'black', display: 'block' }}
+                  >
+                    {page.display}
+                  </Button>
+                )}
               </Link>
             ))}
           </Box>
 
+          {userEmail && (
+            <Box sx={{ flexGrow: 0, marginRight: 2 }}>
+              <BadgesPopover />
+            </Box>
+          )}
+
           <Box sx={{ flexGrow: 0 }}>
-            {!isSignedIn ? (
+            {!userEmail ? (
               <LoadingButton
                 variant='outlined'
                 startIcon={<FontAwesomeIcon icon={faGoogle} />}
-                loading={isGoogleSignInLoading}
+                loading={isSignInLoading}
                 onClick={handleSignIn}
               >
-                Sign in with Google
+                Sign in
               </LoadingButton>
             ) : (
               <Tooltip title={`Sign out from ${userDisplayName}`}>
@@ -189,7 +217,7 @@ function ResponsiveAppBar() {
                       sx={{ width: 24, height: 24 }}
                     />
                   }
-                  loading={isGoogleSignInLoading}
+                  loading={isSignInLoading}
                   onClick={handleSignOut}
                 >
                   Sign Out

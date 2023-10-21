@@ -1,14 +1,14 @@
-import { Box } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 
 const Qr = () => {
   return (
     <>
       <ResponsiveAppBar />
+      <Toolbar />
       <Box
         component='main'
         display='flex'
-        justifyContent='center'
         minHeight='90vh'
         alignItems='center'
         flexDirection='column'

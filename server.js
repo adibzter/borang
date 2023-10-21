@@ -11,6 +11,12 @@ app.use(express.json({ limit: '4mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(compression({ level: 9, memLevel: 9 }));
 
+// API endpoint
+app.use('/api/subscriptions', require('./routes/subscriptionRoute'));
+
+// Webhook endpoint
+app.use('/webhook/stripe', require('./webhooks/stripe'));
+
 app.use(express.static('./client/dist'));
 
 // New form

@@ -1,16 +1,16 @@
-import { Box } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 
 const Privacy = () => {
   return (
     <>
       <ResponsiveAppBar />
+      <Toolbar />
       <Box
         component='main'
         display='flex'
         justifyContent='center'
         minHeight='90vh'
-        alignItems='center'
       >
         <Box>
           <h1 style={{ textAlign: 'center' }}>Privacy Policy</h1>

@@ -5,11 +5,9 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { firebaseConfig } from '../../../secrets/config';
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+initializeApp(firebaseConfig);
 
 export const getCurrentUser = async () => {
   const auth = getAuth();
@@ -21,14 +19,21 @@ export const getCurrentUser = async () => {
   });
 };
 
+export const getTokenId = async () => {
+  const auth = getAuth();
+  const token = await auth.currentUser.getIdToken();
+
+  return token;
+};
+
 export const signIn = async () => {
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
 
   try {
-    await signInWithPopup(auth, provider);
+    return await signInWithPopup(auth, provider);
   } catch (error) {
-    console.error(error);
+    return null;
   }
 };
 
@@ -36,22 +41,4 @@ export const signOut = async () => {
   const auth = getAuth();
 
   await auth.signOut();
-};
-
-export const addSubscription = async (email) => {
-  console.log(email);
-  const subscriptionData = {
-    stripe: {
-      customer: {
-        id: 'cus_OpvYisXe1tMUi2',
-        email,
-      },
-      subscription: {
-        id: 'sub_1O2FceBNLCONpnH901M1YOcE',
-        status: 'active',
-        start_date: 1697558156,
-      },
-    },
-  };
-  await setDoc(doc(db, 'subscriptions', email), subscriptionData);
 };
