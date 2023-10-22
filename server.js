@@ -1,4 +1,5 @@
 const path = require('path');
+const { randomUUID } = require('node:crypto');
 
 const express = require('express');
 const axios = require('axios').default;
@@ -38,6 +39,7 @@ app.post('/form', async (req, res) => {
   }
 });
 
+const formDataStore = {};
 app.post('/submit', async (req, res) => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -55,7 +57,7 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  let limit = 5000;
+  let limit = 10000;
   let waitTime = 20; // ms
   counter = +counter || 1;
 
@@ -119,6 +121,18 @@ app.post('/submit', async (req, res) => {
     extensionRepo: 'https://github.com/ADIBzTER/borang-chrome-extension',
   };
   if (fromExtension) {
+    const formId = randomUUID();
+    formDataStore[formId] = {
+      formUrl,
+      limit,
+      counter,
+      body,
+      waitTime,
+    };
+
+    res.redirect(`/_submit?id=${formId}`);
+    return;
+
     res.send(`
 		<!DOCTYPE html>
 <html lang="en">
@@ -300,6 +314,13 @@ app.post('/submit', async (req, res) => {
 		<img src="${urls.duitnow}" alt="duitnow-qr"/>
 		`
   );
+});
+
+app.get('/api/form/:id', (req, res) => {
+  const formData = formDataStore[req.params.id];
+
+  res.send(formData);
+  delete formDataStore[req.params.id];
 });
 
 async function postData(formUrl, body) {

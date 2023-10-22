@@ -10,6 +10,7 @@ const Home = () => {
   const openNewTab = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
+
   async function handleLog() {
     const tokenId = await getTokenId();
     const response = await fetch('/api/subscriptions', {
