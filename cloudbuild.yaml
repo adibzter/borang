@@ -9,9 +9,9 @@ steps:
     echo "$$SKRIN_BORANG_CONFIG" > secrets/config.js
     echo "$$SKRIN_FIREBASE_SERVICE_ACCOUNT" > secrets/firebase-service-account.json
     if [[ "$BRANCH_NAME" == "production" ]] then
-      SERVICE_NAME=borang
+      export SERVICE_NAME=borang
     elif [[ "$BRANCH_NAME" == "dev" ]] then
-      SERVICE_NAME=borang-dev
+      export SERVICE_NAME=borang-dev
     fi
   env:
   - 'SERVICE_NAME=$SERVICE_NAME'
