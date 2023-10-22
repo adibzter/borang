@@ -31,7 +31,7 @@ steps:
 
 # Deploy container image to Cloud Run
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
+  entrypoint: /bin/bash
   args:
   - '-c'
   - |
