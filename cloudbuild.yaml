@@ -13,8 +13,6 @@ steps:
     elif [[ "$BRANCH_NAME" == "dev" ]] then
       export SERVICE_NAME=borang-dev
     fi
-  env:
-  - 'SERVICE_NAME=$SERVICE_NAME'
 
 
 # Build the container image
