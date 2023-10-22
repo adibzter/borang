@@ -1,14 +1,5 @@
-const {
-  initializeApp,
-  applicationDefault,
-  cert,
-} = require('firebase-admin/app');
-const {
-  getFirestore,
-  Timestamp,
-  FieldValue,
-  Filter,
-} = require('firebase-admin/firestore');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 const { getAuth } = require('firebase-admin/auth');
 
 const serviceAccount = require('../secrets/firebase-service-account.json');
@@ -47,24 +38,51 @@ const ensureAuthenticated = async (req, res, next) => {
   }
 };
 
-const addSubscription = async (email) => {
+const insertUser = async (email) => {
+  const userData = {
+    badges: [],
+    email,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+  };
+  return await db.collection('users').add(userData);
+};
+
+const insertSubscription = async (user_id, stripeData) => {
+  const usersRef = db.collection('users');
+
+  const snapshot = await usersRef
+    .where('email', '==', stripeData.customer.email)
+    .limit(1)
+    .get();
+
+  if (snapshot.empty) {
+    return;
+  }
+
+  const userDoc = snapshot.docs[0];
+  const userData = userDoc.data();
+
   const subscriptionData = {
+    user_id: userDoc.id,
+    created_at: Date.now(),
+    updated_at: Date.now(),
     stripe: {
       customer: {
-        id: 'cus_OpvYisXe1tMUi2',
-        email,
+        id: stripeData.customer.id,
+        email: stripeData.customer.email,
       },
-      subscription: {
-        id: 'sub_1O2FceBNLCONpnH901M1YOcE',
-        status: 'active',
-        start_date: 1697558156,
-      },
+      id: stripeData.id,
+      start_date: stripeData.start_date,
+      status: stripeData.status,
     },
   };
 
-  console.log(email);
-  const docRef = db.collection('subscriptions').doc(email);
-  await docRef.set(subscriptionData);
+  await db.collection('subscriptions').add(subscriptionData);
+  await db
+    .collection('users')
+    .doc(userDoc.id)
+    .update({ badges: [...userData.badges, 'skrin-premium'] });
 };
 
-module.exports = { ensureAuthenticated, addSubscription };
+module.exports = { ensureAuthenticated, insertSubscription, insertUser };
