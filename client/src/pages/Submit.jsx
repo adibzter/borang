@@ -9,7 +9,10 @@ import {
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChrome, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleCheck,
+  faMoneyBillWave,
+} from '@fortawesome/free-solid-svg-icons';
 
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
@@ -110,6 +113,14 @@ const Submit = () => {
             flexDirection='column'
           >
             <Box display='flex'>
+              <Button
+                style={{ marginRight: 2 }}
+                variant='outlined'
+                startIcon={<FontAwesomeIcon icon={faMoneyBillWave} />}
+                onClick={() => openNewTab(urls.stripe)}
+              >
+                Donate
+              </Button>
               <Button
                 style={{ marginRight: 2 }}
                 variant='outlined'
