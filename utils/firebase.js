@@ -63,10 +63,14 @@ const insertUser = async (email) => {
   return await db.collection('users').add(userData);
 };
 
-const insertSubscription = async (user_id, stripeData) => {
+const insertSubscription = async (stripeObject) => {
+  // Temporary solution
+  const customerEmail = stripeObject.customer_email;
+  await insertUser(customerEmail);
+
   const usersRef = db.collection('users');
   const userSnapshot = await usersRef
-    .where('email', '==', stripeData.customer.email)
+    .where('email', '==', customerEmail)
     .limit(1)
     .get();
 
@@ -82,13 +86,9 @@ const insertSubscription = async (user_id, stripeData) => {
     created_at: Date.now(),
     updated_at: Date.now(),
     stripe: {
-      customer: {
-        id: stripeData.customer.id,
-        email: stripeData.customer.email,
-      },
-      id: stripeData.id,
-      start_date: stripeData.start_date,
-      status: stripeData.status,
+      status: stripeObject.status,
+      customer: stripeObject.customer,
+      customer_email: stripeObject.customer_email,
     },
   };
 

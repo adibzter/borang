@@ -1,3 +1,5 @@
+const { insertSubscription } = require('../utils/firebase');
+
 const router = require('express').Router();
 
 // POST /webhook/stripe
@@ -16,8 +18,7 @@ router.post('/', (req, res) => {
 });
 
 function handlePaymentSucceeded(e) {
-  console.log('ayam');
-  console.log(e);
+  insertSubscription(e.data.object);
 }
 
 module.exports = router;
