@@ -74,7 +74,7 @@ const SkrinPremium = () => {
 
   useEffect(() => {
     if (isClicked && userEmail) {
-      window.location.href = `https://buy.stripe.com/test_7sIbLa1BQ08EbeM6op?prefilled_email=${userEmail}`;
+      window.location.href = `https://buy.stripe.com/aEU14J22Ldx0dRS28f?prefilled_email=${userEmail}`;
     }
   }, [isClicked, userEmail]);
 
