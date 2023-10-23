@@ -14,7 +14,6 @@ const verifyIdToken = async (idToken) => {
   try {
     const decodedToken = await getAuth().verifyIdToken(idToken);
     const uid = decodedToken.uid;
-    console.log(decodedToken);
     return true;
   } catch (error) {
     console.error(`Error: ${error}`);
@@ -38,6 +37,22 @@ const ensureAuthenticated = async (req, res, next) => {
   }
 };
 
+const getUser = async (email) => {
+  const usersRef = db.collection('users');
+  const userSnapshot = await usersRef
+    .where('email', '==', email)
+    .limit(1)
+    .get();
+
+  if (userSnapshot.empty) {
+    return null;
+  }
+
+  const userDoc = userSnapshot.docs[0];
+
+  return userDoc.data();
+};
+
 const insertUser = async (email) => {
   const userData = {
     badges: [],
@@ -50,17 +65,16 @@ const insertUser = async (email) => {
 
 const insertSubscription = async (user_id, stripeData) => {
   const usersRef = db.collection('users');
-
-  const snapshot = await usersRef
+  const userSnapshot = await usersRef
     .where('email', '==', stripeData.customer.email)
     .limit(1)
     .get();
 
-  if (snapshot.empty) {
-    return;
+  if (userSnapshot.empty) {
+    return null;
   }
 
-  const userDoc = snapshot.docs[0];
+  const userDoc = userSnapshot.docs[0];
   const userData = userDoc.data();
 
   const subscriptionData = {
@@ -85,4 +99,9 @@ const insertSubscription = async (user_id, stripeData) => {
     .update({ badges: [...userData.badges, 'skrin-premium'] });
 };
 
-module.exports = { ensureAuthenticated, insertSubscription, insertUser };
+module.exports = {
+  ensureAuthenticated,
+  insertSubscription,
+  getUser,
+  insertUser,
+};

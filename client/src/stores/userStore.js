@@ -4,7 +4,8 @@ export const useUserStore = create((set) => ({
   userEmail: null,
   userDisplayName: null,
   userPhotoUrl: null,
-  isSignInLoading: false,
+  isSignInLoading: null,
+  badges: null,
 
   setUserEmail: (userEmail) => set(() => ({ userEmail: userEmail })),
   setUserDisplayName: (userDisplayName) =>
@@ -13,4 +14,5 @@ export const useUserStore = create((set) => ({
     set(() => ({ userPhotoUrl: userPhotoUrl })),
   setIsSignInLoading: (isSignInLoading) =>
     set(() => ({ isSignInLoading: isSignInLoading })),
+  setBadges: (badges) => set(() => ({ badges: badges })),
 }));

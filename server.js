@@ -13,7 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression({ level: 9, memLevel: 9 }));
 
 // API endpoint
-app.use('/api/subscriptions', require('./routes/subscriptionRoute'));
+app.use('/api/users', require('./routes/usersRoute'));
+app.use('/api/subscriptions', require('./routes/subscriptionsRoute'));
 
 // Webhook endpoint
 app.use('/webhook/stripe', require('./webhooks/stripe'));
@@ -57,14 +58,14 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  let limit = 10000;
+  let limit = 5000;
   let waitTime = 20; // ms
   counter = +counter || 1;
 
   // if (!body.fromExtension) {
   //   counter = counter > limit ? limit : counter;
   // }
-  counter = counter > limit ? limit : counter;
+  // counter = counter > limit ? limit : counter;
 
   delete body.url;
   delete body.counter;

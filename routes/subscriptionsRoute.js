@@ -2,7 +2,7 @@ const router = require('express').Router();
 
 const { ensureAuthenticated } = require('../utils/firebase');
 
-// GET /api/subscription
+// GET /api/subscriptions
 router.get('/', ensureAuthenticated, async (req, res) => {
   //   try {
   //     const folderInfo = await getFolderInfo(id);

@@ -5,14 +5,17 @@ import Pricing from '../components/Pricing';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { signIn } from '../utils/firebase';
+import { getCurrentUser, signIn } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import { useEffect, useState } from 'react';
 
 const SkrinPremiumSubDescription = () => {
   return (
     <>
-      <p>With only <s>$9.99</s> $4.99, you will get premium features for <b>ALL</b> of our products</p>
+      <p>
+        With only <s>$9.99</s> $4.99, you will get premium features for{' '}
+        <b>ALL</b> of our products
+      </p>
       <Box sx={{ textAlign: 'left' }}>
         <b>Borang</b>
         <ul>
@@ -59,6 +62,17 @@ const SkrinPremium = () => {
   ]);
 
   useEffect(() => {
+    (async () => {
+      const user = await getCurrentUser();
+      if (user) {
+        setUserEmail(user.email);
+        setUserDisplayName(user.displayName);
+        setUserPhotoUrl(user.photoURL);
+      }
+    })();
+  }, [isSignInLoading]);
+
+  useEffect(() => {
     if (isClicked && userEmail) {
       window.location.href = `https://buy.stripe.com/test_7sIbLa1BQ08EbeM6op?prefilled_email=${userEmail}`;
     }
@@ -74,11 +88,7 @@ const SkrinPremium = () => {
 
       if (!userCredential) {
         setIsClicked(false);
-        return;
       }
-      setUserEmail(userCredential.user.email);
-      setUserDisplayName(userCredential.user.displayName);
-      setUserPhotoUrl(userCredential.user.photoURL);
     }
   };
 
@@ -103,7 +113,6 @@ const SkrinPremium = () => {
             }
             onClick={handleSkrinPremium}
             loading={isSignInLoading}
-            disabled
           >
             Skrin Premium
           </LoadingButton>

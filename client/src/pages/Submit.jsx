@@ -17,11 +17,20 @@ import {
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
 import { purple } from '@mui/material/colors';
+import { getUser } from '../utils/api';
+import { useUserStore } from '../stores/userStore';
 
 const Submit = () => {
   const [limit, setLimit] = useState(0);
   const [counter, setCounter] = useState(1);
   const [request, setRequest] = useState(0);
+  const [isReady, setIsReady] = useState(false);
+
+  const [userEmail, badges, setBadges] = useUserStore((state) => [
+    state.userEmail,
+    state.badges,
+    state.setBadges,
+  ]);
 
   const urls = {
     stripe: 'https://donate.stripe.com/7sI5kZ22L78C8xy28c',
@@ -38,16 +47,45 @@ const Submit = () => {
   };
 
   useEffect(() => {
+    setInterval(() => {
+      setIsReady(true);
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+
     (async () => {
       const formId = window.location.search.split('=')[1];
       const res = await fetch(`/api/form/${formId}`);
-      const { limit, counter, formUrl, body } = await res.json();
-      spamForm(counter, formUrl, body);
+      let { limit, counter, formUrl, body } = await res.json();
 
+      let userData = { badges: [] };
+
+      // Signed in users
+      try {
+        userData = await getUser(userEmail);
+        if (!userData) {
+          userData = { badges: [] };
+        }
+
+        setBadges(userData.badges);
+      } catch (error) {
+        console.error(error);
+      }
+
+      // Limit non-premium users
+      if (!userData.badges.includes('skrin-premium')) {
+        counter = counter > limit ? limit : counter;
+      }
+
+      spamForm(counter, formUrl, body);
       setLimit(limit);
       setCounter(counter);
     })();
-  }, []);
+  }, [isReady]);
 
   // Wait util
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

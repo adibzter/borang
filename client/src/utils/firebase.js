@@ -19,7 +19,7 @@ export const getCurrentUser = async () => {
   });
 };
 
-export const getTokenId = async () => {
+export const getIdToken = async () => {
   const auth = getAuth();
   const token = await auth.currentUser.getIdToken();
 
