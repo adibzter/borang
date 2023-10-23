@@ -12,6 +12,7 @@ import { faChrome, faGithub } from '@fortawesome/free-brands-svg-icons';
 import {
   faCircleCheck,
   faMoneyBillWave,
+  faMedal,
 } from '@fortawesome/free-solid-svg-icons';
 
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
@@ -25,10 +26,10 @@ const Submit = () => {
   const [counter, setCounter] = useState(1);
   const [request, setRequest] = useState(0);
   const [isReady, setIsReady] = useState(false);
+  const [isPremium, setIsPremium] = useState(true);
 
-  const [userEmail, badges, setBadges] = useUserStore((state) => [
+  const [userEmail, setBadges] = useUserStore((state) => [
     state.userEmail,
-    state.badges,
     state.setBadges,
   ]);
 
@@ -61,6 +62,12 @@ const Submit = () => {
       const formId = window.location.search.split('=')[1];
       const res = await fetch(`/api/form/${formId}`);
       let { limit, counter, formUrl, body } = await res.json();
+      // let { limit, counter, formUrl, body } = {
+      //   limit: 9,
+      //   counter: 2,
+      //   formUrl: 'j',
+      //   body: 'dd',
+      // };
 
       let userData = { badges: [] };
 
@@ -78,6 +85,7 @@ const Submit = () => {
 
       // Limit non-premium users
       if (!userData.badges.includes('skrin-premium')) {
+        setIsPremium(false);
         counter = counter > limit ? limit : counter;
       }
 
@@ -138,11 +146,26 @@ const Submit = () => {
             {request} / {counter}
           </b>
           <br />
-          <p>
-            We are limiting response to <b>{limit}</b>. If you want to submit
-            unlimited submissions, get{' '}
-            <span style={{ color: purple[400] }}>Skrin Premium</span>
-          </p>
+          {isPremium ? (
+            <>
+              <p>
+                <span style={{ color: purple[400] }}>Skrin Premium</span>
+              </p>
+              <IconButton color='secondary'>
+                <FontAwesomeIcon
+                  icon={faMedal}
+                  fade
+                  style={{ animationDuration: '2s' }}
+                />
+              </IconButton>
+            </>
+          ) : (
+            <p>
+              We are limiting response to <b>{limit}</b>. If you want to submit
+              unlimited submissions, get{' '}
+              <span style={{ color: purple[400] }}>Skrin Premium</span>
+            </p>
+          )}
           <Box
             marginY={4}
             display='flex'
@@ -154,20 +177,25 @@ const Submit = () => {
               <Button
                 style={{ marginRight: 2 }}
                 variant='outlined'
-                startIcon={<FontAwesomeIcon icon={faMoneyBillWave} />}
-                onClick={() => openNewTab(urls.stripe)}
-              >
-                Donate
-              </Button>
-              <Button
-                style={{ marginRight: 2 }}
-                variant='outlined'
                 startIcon={<FontAwesomeIcon icon={faChrome} />}
                 onClick={() => openNewTab(urls.extensionChromeStore)}
               >
                 Rate Borang
               </Button>
-              <SubscriptionDialog />
+
+              {!isPremium && (
+                <>
+                  <Button
+                    style={{ marginRight: 2 }}
+                    variant='outlined'
+                    startIcon={<FontAwesomeIcon icon={faMoneyBillWave} />}
+                    onClick={() => openNewTab(urls.stripe)}
+                  >
+                    Donate
+                  </Button>
+                  <SubscriptionDialog />
+                </>
+              )}
             </Box>
 
             <h3>GitHub</h3>
