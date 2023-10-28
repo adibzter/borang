@@ -2,23 +2,21 @@ import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MenuItem from '@mui/material/MenuItem';
-import { Avatar, Tooltip } from '@mui/material';
+import { Avatar, IconButton, Tooltip } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle, faStripe } from '@fortawesome/free-brands-svg-icons';
 import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
 import { Link } from 'react-router-dom';
 import BadgesPopover from './BadgesPopover';
+import SwipeableTemporaryDrawer from './SwipeableTemporaryDrawer';
+import { getUser } from '../utils/api';
 
 const pages = [
   {
@@ -41,25 +39,30 @@ const pages = [
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
+  const [isPremium, setIsPremium] = useState(false);
 
   const [
     userEmail,
     userPhotoUrl,
     userDisplayName,
     isSignInLoading,
+    badges,
     setUserEmail,
     setUserDisplayName,
     setUserPhotoUrl,
     setIsSignInLoading,
+    setBadges,
   ] = useUserStore((state) => [
     state.userEmail,
     state.userPhotoUrl,
     state.userDisplayName,
     state.isSignInLoading,
+    state.badges,
     state.setUserEmail,
     state.setUserDisplayName,
     state.setUserPhotoUrl,
     state.setIsSignInLoading,
+    state.setBadges,
   ]);
 
   useEffect(() => {
@@ -69,12 +72,23 @@ function ResponsiveAppBar() {
         setUserEmail(user.email);
         setUserDisplayName(user.displayName);
         setUserPhotoUrl(user.photoURL);
+
+        try {
+          const userData = await getUser(user.email);
+          setBadges(!userData ? [] : userData.badges);
+
+          if (userData.badges.includes('skrin-premium')) {
+            setIsPremium(true);
+          }
+        } catch (error) {
+          console.error(error);
+        }
       }
     })();
   }, [isSignInLoading]);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
+  const openNewTab = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleCloseNavMenu = () => {
@@ -89,13 +103,13 @@ function ResponsiveAppBar() {
   };
 
   const handleSignOut = async () => {
-    setIsSignInLoading(true);
     await signOut();
 
     setUserEmail(null);
     setUserDisplayName(null);
     setUserPhotoUrl(null);
-    setIsSignInLoading(false);
+    setBadges(null);
+    setIsPremium(false);
   };
 
   return (
@@ -112,48 +126,7 @@ function ResponsiveAppBar() {
           <LogoAppBar display={{ xs: 'none', md: 'flex' }} />
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpenNavMenu}
-              color='black'
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.id} onClick={handleCloseNavMenu}>
-                  <Link
-                    key={page.id}
-                    to={`/${page.id}`}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Typography textAlign='center' color='black'>
-                      {page.display}
-                    </Typography>
-                  </Link>
-                </MenuItem>
-              ))}
-            </Menu>
+            <SwipeableTemporaryDrawer />
           </Box>
           <LogoAppBar display={{ xs: 'flex', md: 'none' }} />
           <Typography
@@ -189,9 +162,21 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          {userEmail && (
+          {isPremium && (
             <Box sx={{ flexGrow: 0, marginRight: 2 }}>
-              <BadgesPopover />
+              <Tooltip title='Manage Subscription'>
+                <IconButton color='primary'>
+                  <FontAwesomeIcon
+                    onClick={() =>
+                      openNewTab(
+                        `https://billing.stripe.com/p/login/4gwaFudEs44lgpO000?prefilled_email=${userEmail}`
+                      )
+                    }
+                    icon={faStripe}
+                  />
+                </IconButton>
+              </Tooltip>
+              {/* <BadgesPopover /> */}
             </Box>
           )}
 

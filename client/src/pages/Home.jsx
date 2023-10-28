@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Box, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChrome, faGithub } from '@fortawesome/free-brands-svg-icons';
@@ -6,6 +7,10 @@ import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
 
 const Home = () => {
+  useEffect(() => {
+    document.title = 'Borang | Home';
+  }, []);
+
   const openNewTab = (url) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };

@@ -48,6 +48,8 @@ const Submit = () => {
   };
 
   useEffect(() => {
+    document.title = 'Borang | Pricing';
+
     setInterval(() => {
       setIsReady(true);
     }, 2000);

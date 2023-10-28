@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Box, Toolbar } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 
 const Privacy = () => {
+  useEffect(() => {
+    document.title = 'Borang | Privacy Policy';
+  }, []);
+
   return (
     <>
       <ResponsiveAppBar />

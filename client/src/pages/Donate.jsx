@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 
 const Donate = () => {
+  useEffect(() => {
+    document.title = 'Borang | Donate';
+  }, []);
+
   return (
     <>
       <ResponsiveAppBar />

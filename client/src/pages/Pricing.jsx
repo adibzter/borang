@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Box, Button, Grid, Toolbar } from '@mui/material';
 import { green } from '@mui/material/colors';
 
@@ -6,6 +7,10 @@ import PricingComponent from '../components/Pricing';
 import SkrinPremium from '../components/SkrinPremium';
 
 const Pricing = () => {
+  useEffect(() => {
+    document.title = 'Borang | Pricing';
+  }, []);
+
   return (
     <>
       <ResponsiveAppBar />
