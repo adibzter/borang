@@ -58,7 +58,7 @@ app.post('/submit', async (req, res) => {
 
   console.log(`Form URL: ${formUrl}`);
 
-  let limit = 5000;
+  let limit = 500;
   let waitTime = 20; // ms
   counter = +counter || 1;
 

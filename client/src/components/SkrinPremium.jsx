@@ -21,6 +21,7 @@ const SkrinPremiumSubDescription = () => {
         <ul>
           <li>No ads</li>
           <li>Unlimited form submission</li>
+          <li>Fast form submission</li>
           <li>Support for mobile (Soon)</li>
           <li>Support for form that require sign-in (Soon)</li>
           <li>More in the future...</li>

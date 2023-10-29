@@ -26,7 +26,7 @@ const Submit = () => {
   const [counter, setCounter] = useState(1);
   const [request, setRequest] = useState(0);
   const [isReady, setIsReady] = useState(false);
-  const [isPremium, setIsPremium] = useState(true);
+  const [isPremium, setIsPremium] = useState(false);
 
   const [userEmail, setBadges] = useUserStore((state) => [
     state.userEmail,
@@ -88,12 +88,16 @@ const Submit = () => {
       // Limit non-premium users
       if (!userData.badges.includes('skrin-premium')) {
         setIsPremium(false);
+        window._isPremium = false;
         counter = counter > limit ? limit : counter;
+      } else {
+        setIsPremium(true);
+        window._isPremium = true;
       }
 
-      spamForm(counter, formUrl, body);
       setLimit(limit);
       setCounter(counter);
+      spamForm(counter, formUrl, body);
     })();
   }, [isReady]);
 
@@ -101,17 +105,37 @@ const Submit = () => {
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const spamForm = async (counter, formUrl, body) => {
-    for (let i = 0; i < counter; i++) {
-      await wait(10);
+    if (window._isPremium) {
+      for (let i = 0; i < counter; i++) {
+        await wait(15);
 
-      fetch(formUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body,
-      });
-      setRequest((prev) => prev + 1);
+        fetch(formUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body,
+        });
+        setRequest((prev) => prev + 1);
+      }
+    } else {
+      for (let i = 0; i < counter; i++) {
+        // await wait(10);
+
+        try {
+          await fetch(formUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body,
+          });
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setRequest((prev) => prev + 1);
+        }
+      }
     }
   };
 
@@ -125,106 +149,108 @@ const Submit = () => {
         justifyContent='center'
         minHeight='90vh'
       >
-        <Box display='flex' flexDirection='column' alignItems='center'>
-          <h1 style={{ textAlign: 'center' }}>Submit</h1>
-          <h3>
-            Can you do me a favour by subscribing my{' '}
-            <a href={urls.subscribeYoutube} target='_blank' rel='noreferrer'>
-              YouTube channel
-            </a>
-            ?
-          </h3>
-          {request !== counter ? (
-            <CircularProgress
-              variant='determinate'
-              value={((request / counter) * 100).toFixed()}
-            />
-          ) : (
-            <IconButton color='primary'>
-              <FontAwesomeIcon icon={faCircleCheck} />
-            </IconButton>
-          )}
-          <b>
-            {request} / {counter}
-          </b>
-          <br />
-          {isPremium ? (
-            <>
-              <p>
-                <span style={{ color: purple[400] }}>Skrin Premium</span>
-              </p>
-              <IconButton color='secondary'>
-                <FontAwesomeIcon
-                  icon={faMedal}
-                  fade
-                  style={{ animationDuration: '2s' }}
-                />
-              </IconButton>
-            </>
-          ) : (
-            <p>
-              We are limiting response to <b>{limit}</b>. If you want to submit
-              unlimited submissions, get{' '}
-              <span style={{ color: purple[400] }}>Skrin Premium</span>
-            </p>
-          )}
+        {!isReady ? (
           <Box
-            marginY={4}
             display='flex'
-            justifyContent='center'
-            alignItems='center'
             flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
           >
-            <Box display='flex'>
-              <Button
-                style={{ marginRight: 2 }}
-                variant='outlined'
-                startIcon={<FontAwesomeIcon icon={faChrome} />}
-                onClick={() => openNewTab(urls.extensionChromeStore)}
-              >
-                Rate Borang
-              </Button>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Box display='flex' flexDirection='column' alignItems='center'>
+            <h1 style={{ textAlign: 'center' }}>Submit</h1>
+            <h3>
+              Can you do me a favour by subscribing my{' '}
+              <a href={urls.subscribeYoutube} target='_blank' rel='noreferrer'>
+                YouTube channel
+              </a>
+              ?
+            </h3>
+            {request !== counter ? (
+              <CircularProgress
+                variant='determinate'
+                value={((request / counter) * 100).toFixed()}
+              />
+            ) : (
+              <IconButton color='primary'>
+                <FontAwesomeIcon icon={faCircleCheck} />
+              </IconButton>
+            )}
+            <b>
+              {request} / {counter}
+            </b>
+            <br />
+            {isPremium ? (
+              <>
+                <p>
+                  <span style={{ color: purple[400] }}>Skrin Premium</span>
+                </p>
+                <IconButton color='secondary'>
+                  <FontAwesomeIcon
+                    icon={faMedal}
+                    fade
+                    style={{ animationDuration: '2s' }}
+                  />
+                </IconButton>
+              </>
+            ) : (
+              <p style={{ textAlign: 'center' }}>
+                Free version has speed limit and can submit up to <b>{limit}</b>{' '}
+                submissions. Get{' '}
+                <span style={{ color: purple[400] }}>Skrin Premium</span> for
+                unlimited and fast submission
+              </p>
+            )}
+            <Box
+              marginY={4}
+              display='flex'
+              justifyContent='center'
+              alignItems='center'
+              flexDirection='column'
+            >
+              <Box display='flex'>
+                <Button
+                  style={{ marginRight: 2 }}
+                  variant='outlined'
+                  startIcon={<FontAwesomeIcon icon={faChrome} />}
+                  onClick={() => openNewTab(urls.extensionChromeStore)}
+                >
+                  Rate Borang
+                </Button>
 
-              {!isPremium && (
-                <>
-                  <Button
-                    style={{ marginRight: 2 }}
-                    variant='outlined'
-                    startIcon={<FontAwesomeIcon icon={faMoneyBillWave} />}
-                    onClick={() => openNewTab(urls.stripe)}
-                  >
-                    Donate
-                  </Button>
-                  <SubscriptionDialog />
-                </>
-              )}
-            </Box>
+                {!isPremium && <SubscriptionDialog />}
+              </Box>
 
-            <h3>GitHub</h3>
-            <Box display='flex'>
-              <Button
-                style={{ marginRight: 2 }}
-                variant='outlined'
-                startIcon={<FontAwesomeIcon icon={faGithub} />}
-                onClick={() => openNewTab('https://github.com/adibzter/borang')}
-              >
-                Web App
-              </Button>
-              <Button
-                style={{ marginLeft: 2 }}
-                variant='outlined'
-                startIcon={<FontAwesomeIcon icon={faGithub} />}
-                onClick={() =>
-                  openNewTab(
-                    'https://github.com/adibzter/borang-chrome-extension'
-                  )
-                }
-              >
-                Chrome Extension
-              </Button>
+              <h3>GitHub</h3>
+              <Box display='flex'>
+                <Button
+                  style={{ marginRight: 2 }}
+                  variant='outlined'
+                  startIcon={<FontAwesomeIcon icon={faGithub} />}
+                  onClick={() =>
+                    openNewTab('https://github.com/adibzter/borang')
+                  }
+                >
+                  Web App
+                </Button>
+                <Button
+                  style={{ marginLeft: 2 }}
+                  variant='outlined'
+                  startIcon={<FontAwesomeIcon icon={faGithub} />}
+                  onClick={() =>
+                    openNewTab(
+                      'https://github.com/adibzter/borang-chrome-extension'
+                    )
+                  }
+                >
+                  Chrome Extension
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        )}
       </Box>
     </>
   );
