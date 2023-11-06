@@ -27,6 +27,8 @@ const SkrinPremiumSubDescription = () => {
         </ul>
 
         <b>Sementara (coming soon)</b>
+        <br />
+        <br />
         <b>Skrin (coming soon)</b>
       </Box>
     </>
