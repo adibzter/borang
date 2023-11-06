@@ -19,25 +19,15 @@ const SkrinPremiumSubDescription = () => {
       <Box sx={{ textAlign: 'left' }}>
         <b>Borang</b>
         <ul>
-          <li>No ads</li>
           <li>Unlimited form submission</li>
           <li>Fast form submission</li>
-          <li>Support for mobile (Soon)</li>
-          <li>Support for form that require sign-in (Soon)</li>
-          <li>More in the future...</li>
+          <li>No ads (coming soon)</li>
+          <li>Support for mobile (coming soon)</li>
+          <li>Support for form that require sign-in (coming soon)</li>
         </ul>
 
-        <b>Sementara</b>
-        <ul>
-          <li>No ads</li>
-          <li>More in the future...</li>
-        </ul>
-
-        <b>Skrin</b>
-        <ul>
-          <li>No ads</li>
-          <li>More in the future...</li>
-        </ul>
+        <b>Sementara (coming soon)</b>
+        <b>Skrin (coming soon)</b>
       </Box>
     </>
   );
@@ -62,16 +52,16 @@ const SkrinPremium = () => {
     state.setIsSignInLoading,
   ]);
 
-  useEffect(() => {
-    (async () => {
-      const user = await getCurrentUser();
-      if (user) {
-        setUserEmail(user.email);
-        setUserDisplayName(user.displayName);
-        setUserPhotoUrl(user.photoURL);
-      }
-    })();
-  }, [isSignInLoading]);
+  // useEffect(() => {
+  //   (async () => {
+  //     const user = await getCurrentUser();
+  //     if (user) {
+  //       setUserEmail(user.email);
+  //       setUserDisplayName(user.displayName);
+  //       setUserPhotoUrl(user.photoURL);
+  //     }
+  //   })();
+  // }, [isSignInLoading]);
 
   useEffect(() => {
     if (isClicked && userEmail) {
