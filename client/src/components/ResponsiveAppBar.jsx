@@ -42,6 +42,7 @@ function ResponsiveAppBar() {
   const [isPremium, setIsPremium] = useState(false);
 
   const [
+    setIsReady,
     userEmail,
     userPhotoUrl,
     userDisplayName,
@@ -53,6 +54,7 @@ function ResponsiveAppBar() {
     setIsSignInLoading,
     setBadges,
   ] = useUserStore((state) => [
+    state.setIsReady,
     state.userEmail,
     state.userPhotoUrl,
     state.userDisplayName,
@@ -67,7 +69,10 @@ function ResponsiveAppBar() {
 
   useEffect(() => {
     (async () => {
+      setIsReady(false);
       const user = await getCurrentUser();
+      setIsReady(true);
+
       if (user) {
         setUserEmail(user.email);
         setUserDisplayName(user.displayName);

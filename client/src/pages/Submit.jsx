@@ -25,10 +25,10 @@ const Submit = () => {
   const [limit, setLimit] = useState(0);
   const [counter, setCounter] = useState(1);
   const [request, setRequest] = useState(0);
-  const [isReady, setIsReady] = useState(false);
-  const [isPremium, setIsPremium] = useState(false);
+  const [isPremium, setIsPremium] = useState(null);
 
-  const [userEmail, setBadges] = useUserStore((state) => [
+  const [isReady, userEmail, setBadges] = useUserStore((state) => [
+    state.isReady,
     state.userEmail,
     state.setBadges,
   ]);
@@ -49,10 +49,6 @@ const Submit = () => {
 
   useEffect(() => {
     document.title = 'Borang | Pricing';
-
-    setInterval(() => {
-      setIsReady(true);
-    }, 2000);
   }, []);
 
   useEffect(() => {
@@ -182,7 +178,7 @@ const Submit = () => {
               {request} / {counter}
             </b>
             <br />
-            {isPremium ? (
+            {isPremium == true && (
               <>
                 <p>
                   <span style={{ color: purple[400] }}>Skrin Premium</span>
@@ -195,7 +191,9 @@ const Submit = () => {
                   />
                 </IconButton>
               </>
-            ) : (
+            )}
+
+            {isPremium == false && (
               <p style={{ textAlign: 'center' }}>
                 Free version has speed limit and can submit up to <b>{limit}</b>{' '}
                 submissions. Get{' '}
