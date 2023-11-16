@@ -8,7 +8,11 @@ import {
   Toolbar,
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChrome, faGithub } from '@fortawesome/free-brands-svg-icons';
+import {
+  faChrome,
+  faGithub,
+  faDiscord,
+} from '@fortawesome/free-brands-svg-icons';
 import {
   faCircleCheck,
   faMoneyBillWave,
@@ -41,6 +45,7 @@ const Submit = () => {
       'https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol',
     serverRepo: 'https://github.com/ADIBzTER/borang',
     extensionRepo: 'https://github.com/ADIBzTER/borang-chrome-extension',
+    discord: 'https://discord.gg/rGkPJju9zD',
   };
 
   const openNewTab = (url) => {
@@ -216,6 +221,14 @@ const Submit = () => {
                   onClick={() => openNewTab(urls.extensionChromeStore)}
                 >
                   Rate Borang
+                </Button>
+                <Button
+                  style={{ marginRight: 2 }}
+                  variant='outlined'
+                  startIcon={<FontAwesomeIcon icon={faDiscord} />}
+                  onClick={() => openNewTab(urls.discord)}
+                >
+                  Join Discord
                 </Button>
 
                 {!isPremium && <SubscriptionDialog />}
