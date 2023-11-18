@@ -5,7 +5,7 @@ import Pricing from '../components/Pricing';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMedal } from '@fortawesome/free-solid-svg-icons';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { getCurrentUser, signIn } from '../utils/firebase';
+import { signIn } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import { useEffect, useState } from 'react';
 
@@ -38,32 +38,14 @@ const SkrinPremiumSubDescription = () => {
 const SkrinPremium = () => {
   const [isClicked, setIsClicked] = useState(false);
 
-  const [
-    userEmail,
-    isSignInLoading,
-    setUserEmail,
-    setUserDisplayName,
-    setUserPhotoUrl,
-    setIsSignInLoading,
-  ] = useUserStore((state) => [
-    state.userEmail,
-    state.isSignInLoading,
-    state.setUserEmail,
-    state.setUserDisplayName,
-    state.setUserPhotoUrl,
-    state.setIsSignInLoading,
-  ]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const user = await getCurrentUser();
-  //     if (user) {
-  //       setUserEmail(user.email);
-  //       setUserDisplayName(user.displayName);
-  //       setUserPhotoUrl(user.photoURL);
-  //     }
-  //   })();
-  // }, [isSignInLoading]);
+  const [isReady, userEmail, badges, isSignInLoading, setIsSignInLoading] =
+    useUserStore((state) => [
+      state.isReady,
+      state.userEmail,
+      state.badges,
+      state.isSignInLoading,
+      state.setIsSignInLoading,
+    ]);
 
   useEffect(() => {
     if (isClicked && userEmail) {
@@ -106,6 +88,7 @@ const SkrinPremium = () => {
             }
             onClick={handleSkrinPremium}
             loading={isSignInLoading}
+            disabled={!isReady || badges?.includes('skrin-premium')}
           >
             Skrin Premium
           </LoadingButton>

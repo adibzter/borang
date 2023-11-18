@@ -82,7 +82,7 @@ function ResponsiveAppBar() {
           const userData = await getUser(user.email);
           setBadges(!userData ? [] : userData.badges);
 
-          if (userData.badges.includes('skrin-premium')) {
+          if (userData?.badges?.includes('skrin-premium')) {
             setIsPremium(true);
           }
         } catch (error) {

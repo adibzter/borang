@@ -30,6 +30,7 @@ const Pricing = ({
         <b style={{ fontSize: '3rem', color: color }}>${price}</b>
         <sub>/month</sub>
         {subDescription}
+        <hr />
         {Button}
       </Grid>
     </>
