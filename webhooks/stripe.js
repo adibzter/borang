@@ -1,4 +1,7 @@
-const { insertSubscription } = require('../utils/firebase');
+const {
+  insertSubscription,
+  removeSkrinPremiumBadge,
+} = require('../utils/firebase');
 
 const router = require('express').Router();
 
@@ -10,6 +13,9 @@ router.post('/', (req, res) => {
     case 'invoice.payment_succeeded':
       handlePaymentSucceeded(event);
       break;
+    case 'customer.subscription.deleted':
+      handleSubscriptionDeleted(event);
+      break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
@@ -19,6 +25,10 @@ router.post('/', (req, res) => {
 
 function handlePaymentSucceeded(e) {
   insertSubscription(e.data.object);
+}
+
+function handleSubscriptionDeleted(e) {
+  removeSkrinPremiumBadge(e.data.object);
 }
 
 module.exports = router;

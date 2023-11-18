@@ -53,6 +53,22 @@ const getUser = async (email) => {
   return userDoc.data();
 };
 
+const getSubscription = async (customer) => {
+  const subscriptionsRef = db.collection('subscriptions');
+  const subscriptionSnapshot = await subscriptionsRef
+    .where('stripe.customer', '==', customer)
+    .limit(1)
+    .get();
+
+  if (subscriptionSnapshot.empty) {
+    return null;
+  }
+
+  const subscriptionDoc = subscriptionSnapshot.docs[0];
+
+  return subscriptionDoc.data();
+};
+
 const insertUser = async (email) => {
   const userData = {
     badges: [],
@@ -99,9 +115,35 @@ const insertSubscription = async (stripeObject) => {
     .update({ badges: [...userData.badges, 'skrin-premium'] });
 };
 
+const removeSkrinPremiumBadge = async (stripeObject) => {
+  const customer = stripeObject.customer;
+  const subscriptionData = await getSubscription(customer);
+
+  const usersRef = db.collection('users');
+  const userSnapshot = await usersRef
+    .where('email', '==', subscriptionData.stripe.customer_email)
+    .limit(1)
+    .get();
+
+  if (userSnapshot.empty) {
+    return null;
+  }
+
+  const userDoc = userSnapshot.docs[0];
+  const userData = userDoc.data();
+
+  await db
+    .collection('users')
+    .doc(userDoc.id)
+    .update({
+      badges: userData.badges.filter((badge) => badge !== 'skrin-premium'),
+    });
+};
+
 module.exports = {
   ensureAuthenticated,
   insertSubscription,
   getUser,
   insertUser,
+  removeSkrinPremiumBadge,
 };
