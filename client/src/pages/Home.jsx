@@ -24,6 +24,7 @@ const Home = () => {
         alignItems='center'
         flexDirection='column'
         minHeight='90vh'
+        marginTop='60px'
       >
         <h2>Borang Chrome Extension</h2>
         <iframe

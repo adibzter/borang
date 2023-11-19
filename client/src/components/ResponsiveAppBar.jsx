@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Avatar, IconButton, Tooltip } from '@mui/material';
+import { Alert, Avatar, IconButton, Tooltip } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle, faStripe } from '@fortawesome/free-brands-svg-icons';
@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 import BadgesPopover from './BadgesPopover';
 import SwipeableTemporaryDrawer from './SwipeableTemporaryDrawer';
 import { getUser } from '../utils/api';
+import { purple } from '@mui/material/colors';
 
 const pages = [
   {
@@ -217,6 +218,12 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
+      <Alert severity='info'>
+        <span style={{ color: purple[400] }}>Skrin Premium</span> will cost{' '}
+        <b>$5.99</b> starting on <b>26th of November 2023</b>. Get Skrin Premium
+        now while the price still at <b>$4.99</b>! Existing customer will not be
+        affected
+      </Alert>
     </AppBar>
   );
 }

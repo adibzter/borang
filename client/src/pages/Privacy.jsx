@@ -16,6 +16,7 @@ const Privacy = () => {
         display='flex'
         justifyContent='center'
         minHeight='90vh'
+        marginTop='20px'
       >
         <Box>
           <h1 style={{ textAlign: 'center' }}>Privacy Policy</h1>

@@ -21,6 +21,7 @@ const Pricing = () => {
         flexDirection='column'
         alignItems='center'
         minHeight='90vh'
+        marginTop='20px'
       >
         <h1 style={{ textAlign: 'center' }}>Pricing</h1>
         <Box display='flex' flexDirection='row'>
