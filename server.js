@@ -317,11 +317,18 @@ app.post('/submit', async (req, res) => {
   );
 });
 
-app.get('/api/form/:id', (req, res) => {
+// GET /api/forms/:id
+app.get('/api/forms/:id', (req, res) => {
   const formData = formDataStore[req.params.id];
 
-  res.send(formData);
-  // delete formDataStore[req.params.id];
+  res.json(formData);
+});
+
+// DELETE /api/forms/:id
+app.delete('/api/forms/:id', (req, res) => {
+  delete formDataStore[req.params.id];
+
+  res.json({ message: `Deleted ${req.params.id}` });
 });
 
 async function postData(formUrl, body) {

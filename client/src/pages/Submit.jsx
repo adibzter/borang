@@ -22,7 +22,7 @@ import {
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
 import { purple } from '@mui/material/colors';
-import { getUser } from '../utils/api';
+import { deleteFormData, getFormData, getUser } from '../utils/api';
 import { useUserStore } from '../stores/userStore';
 
 const Submit = () => {
@@ -63,8 +63,7 @@ const Submit = () => {
 
     (async () => {
       const formId = window.location.search.split('=')[1];
-      const res = await fetch(`/api/form/${formId}`);
-      let { limit, counter, formUrl, body } = await res.json();
+      let { limit, counter, formUrl, body } = await getFormData(formId);
       // let { limit, counter, formUrl, body } = {
       //   limit: 9,
       //   counter: 2,
@@ -91,6 +90,7 @@ const Submit = () => {
         setIsPremium(false);
         window._isPremium = false;
         counter = counter > limit ? limit : counter;
+        deleteFormData(formId);
       } else {
         setIsPremium(true);
         window._isPremium = true;
