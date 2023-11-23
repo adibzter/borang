@@ -14,7 +14,7 @@ import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
 import { Link } from 'react-router-dom';
-import BadgesPopover from './BadgesPopover';
+import SettingsPopover from './SettingsPopover';
 import SwipeableTemporaryDrawer from './SwipeableTemporaryDrawer';
 import { getUser } from '../utils/api';
 import { purple } from '@mui/material/colors';
@@ -48,7 +48,6 @@ function ResponsiveAppBar() {
     userPhotoUrl,
     userDisplayName,
     isSignInLoading,
-    badges,
     setUserEmail,
     setUserDisplayName,
     setUserPhotoUrl,
@@ -60,7 +59,6 @@ function ResponsiveAppBar() {
     state.userPhotoUrl,
     state.userDisplayName,
     state.isSignInLoading,
-    state.badges,
     state.setUserEmail,
     state.setUserDisplayName,
     state.setUserPhotoUrl,
@@ -168,23 +166,7 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          {isPremium && (
-            <Box sx={{ flexGrow: 0, marginRight: 2 }}>
-              <Tooltip title='Manage Subscription'>
-                <IconButton color='primary'>
-                  <FontAwesomeIcon
-                    onClick={() =>
-                      openNewTab(
-                        `https://billing.stripe.com/p/login/4gwaFudEs44lgpO000?prefilled_email=${userEmail}`
-                      )
-                    }
-                    icon={faStripe}
-                  />
-                </IconButton>
-              </Tooltip>
-              {/* <BadgesPopover /> */}
-            </Box>
-          )}
+          {isPremium && <SettingsPopover />}
 
           <Box sx={{ flexGrow: 0 }}>
             {!userEmail ? (
@@ -221,8 +203,8 @@ function ResponsiveAppBar() {
       <Alert severity='info'>
         <span style={{ color: purple[400] }}>Skrin Premium</span> will cost{' '}
         <b>$5.99</b> starting on <b>26th of November 2023</b>. Get Skrin Premium
-        now while the price still at <b>$4.99</b>! Existing customer will not be
-        affected
+        now while the price still at <b>$4.99</b>! Existing customers will not
+        be affected
       </Alert>
     </AppBar>
   );

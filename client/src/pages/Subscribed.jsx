@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 
 const Subscribed = () => {
   useEffect(() => {
     document.title = 'Borang | Subscribed';
-
-    setTimeout(() => {
-      location.href = '/';
-    }, 10000);
   }, []);
+
+  const openNewTab = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <>
@@ -22,10 +24,17 @@ const Subscribed = () => {
         minHeight='90vh'
         flexDirection='column'
       >
-        <h1>💗Thanks For the The Subscription💗</h1>
-        <h2>We appreciate very much your contribution to this project</h2>
+        <h1>🌟Thanks For the The Subscription🌟</h1>
         <h3>Make sure you are logged in using the correct account</h3>
-        <p>Redirecting...</p>
+        <h4>Join discord server to get more news for upcoming updates!</h4>
+        <Button
+          style={{ marginRight: 2 }}
+          variant='outlined'
+          startIcon={<FontAwesomeIcon icon={faDiscord} />}
+          onClick={() => openNewTab('https://discord.gg/rGkPJju9zD')}
+        >
+          Join Discord
+        </Button>
       </Box>
     </>
   );

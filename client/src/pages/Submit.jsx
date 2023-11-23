@@ -13,11 +13,7 @@ import {
   faGithub,
   faDiscord,
 } from '@fortawesome/free-brands-svg-icons';
-import {
-  faCircleCheck,
-  faMoneyBillWave,
-  faMedal,
-} from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faMedal } from '@fortawesome/free-solid-svg-icons';
 
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
