@@ -1,5 +1,5 @@
 const {
-  insertSubscription,
+  upsertSubscription,
   removeSkrinPremiumBadge,
 } = require('../utils/firebase');
 
@@ -8,6 +8,7 @@ const router = require('express').Router();
 // POST /webhook/stripe
 router.post('/', (req, res) => {
   const event = req.body;
+  console.log(event);
 
   switch (event.type) {
     case 'invoice.payment_succeeded':
@@ -24,7 +25,7 @@ router.post('/', (req, res) => {
 });
 
 function handlePaymentSucceeded(e) {
-  insertSubscription(e.data.object);
+  upsertSubscription(e.data.object);
 }
 
 function handleSubscriptionDeleted(e) {

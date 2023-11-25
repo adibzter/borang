@@ -37,7 +37,7 @@ const ensureAuthenticated = async (req, res, next) => {
   }
 };
 
-const getUser = async (email) => {
+const getUserByEmail = async (email) => {
   const usersRef = db.collection('users');
   const userSnapshot = await usersRef
     .where('email', '==', email)
@@ -49,14 +49,39 @@ const getUser = async (email) => {
   }
 
   const userDoc = userSnapshot.docs[0];
+  const userData = {
+    id: userDoc.id,
+    ...userDoc.data(),
+  };
 
-  return userDoc.data();
+  return userData;
 };
 
-const getSubscription = async (customer) => {
+const insertUser = async (email) => {
+  let userData = {
+    badges: [],
+    email,
+    created_at: Date.now(),
+    updated_at: Date.now(),
+  };
+  const userRef = await db.collection('users').add(userData);
+
+  userData = {
+    id: userRef.id,
+    ...userData,
+  };
+
+  return userData;
+};
+
+const updateUser = async (userId, data) => {
+  await db.collection('users').doc(userId).update(data);
+};
+
+const getSubscriptionById = async (subscriptionId) => {
   const subscriptionsRef = db.collection('subscriptions');
   const subscriptionSnapshot = await subscriptionsRef
-    .where('stripe.customer', '==', customer)
+    .where('stripe.subscription', '==', subscriptionId)
     .limit(1)
     .get();
 
@@ -65,85 +90,86 @@ const getSubscription = async (customer) => {
   }
 
   const subscriptionDoc = subscriptionSnapshot.docs[0];
-
-  return subscriptionDoc.data();
-};
-
-const insertUser = async (email) => {
-  const userData = {
-    badges: [],
-    email,
-    created_at: Date.now(),
-    updated_at: Date.now(),
-  };
-  return await db.collection('users').add(userData);
-};
-
-const insertSubscription = async (stripeObject) => {
-  // Temporary solution
-  const customerEmail = stripeObject.customer_email;
-  await insertUser(customerEmail);
-
-  const usersRef = db.collection('users');
-  const userSnapshot = await usersRef
-    .where('email', '==', customerEmail)
-    .limit(1)
-    .get();
-
-  if (userSnapshot.empty) {
-    return null;
-  }
-
-  const userDoc = userSnapshot.docs[0];
-  const userData = userDoc.data();
-
   const subscriptionData = {
-    user_id: userDoc.id,
+    id: subscriptionDoc.id,
+    ...subscriptionDoc.data(),
+  };
+
+  return subscriptionData;
+};
+
+const insertSubscription = async (userId, invoiceObject) => {
+  let subscriptionData = {
+    user_id: userId,
     created_at: Date.now(),
     updated_at: Date.now(),
     stripe: {
-      status: stripeObject.status,
-      customer: stripeObject.customer,
-      customer_email: stripeObject.customer_email,
+      status: invoiceObject.status,
+      customer: invoiceObject.customer,
+      customer_email: invoiceObject.customer_email,
+      subscription: invoiceObject.subscription,
     },
   };
+  const subscriptionRef = await db
+    .collection('subscriptions')
+    .add(subscriptionData);
 
-  await db.collection('subscriptions').add(subscriptionData);
-  await db
-    .collection('users')
-    .doc(userDoc.id)
-    .update({ badges: [...userData.badges, 'skrin-premium'] });
+  subscriptionData = {
+    id: subscriptionRef.id,
+    ...subscriptionData,
+  };
+
+  return subscriptionData;
 };
 
-const removeSkrinPremiumBadge = async (stripeObject) => {
-  const customer = stripeObject.customer;
-  const subscriptionData = await getSubscription(customer);
+const updateSubscription = async (subscriptionId, data) => {
+  await db.collection('subscriptions').doc(subscriptionId).update(data);
+};
 
-  const usersRef = db.collection('users');
-  const userSnapshot = await usersRef
-    .where('email', '==', subscriptionData.stripe.customer_email)
-    .limit(1)
-    .get();
+const upsertSubscription = async (invoiceObject) => {
+  let userData = await getUserByEmail(invoiceObject.customer_email);
 
-  if (userSnapshot.empty) {
-    return null;
+  if (!userData) {
+    userData = await insertUser(invoiceObject.customer_email);
+
+    await updateUser(userData.id, {
+      badges: [...userData.badges, 'skrin-premium'],
+    });
+  } else {
+    await updateUser(userData.id, {
+      updated_at: Date.now(),
+      badges: [...userData.badges, 'skrin-premium'],
+    });
   }
 
-  const userDoc = userSnapshot.docs[0];
-  const userData = userDoc.data();
+  let subscriptionData = await getSubscriptionById(invoiceObject.subscription);
 
-  await db
-    .collection('users')
-    .doc(userDoc.id)
-    .update({
-      badges: userData.badges.filter((badge) => badge !== 'skrin-premium'),
+  if (!subscriptionData) {
+    await insertSubscription(userData.id, invoiceObject);
+  } else {
+    await updateSubscription(invoiceObject.subscription, {
+      updated_at: Date.now(),
     });
+  }
+};
+
+const removeSkrinPremiumBadge = async (subscriptionObject) => {
+  const subscriptionData = await getSubscriptionById(subscriptionObject.id);
+  const userData = await getUserByEmail(subscriptionData.stripe.customer_email);
+
+  await updateSubscription(subscriptionData.id, {
+    updated_at: Date.now(),
+    'stripe.status': subscriptionObject.status,
+  });
+  await updateUser(userData.id, {
+    updated_at: Date.now(),
+    badges: userData.badges.filter((badge) => badge !== 'skrin-premium'),
+  });
 };
 
 module.exports = {
   ensureAuthenticated,
-  insertSubscription,
-  getUser,
-  insertUser,
+  upsertSubscription,
+  getUserByEmail,
   removeSkrinPremiumBadge,
 };

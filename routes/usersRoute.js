@@ -1,10 +1,10 @@
 const router = require('express').Router();
 
-const { ensureAuthenticated, getUser } = require('../utils/firebase');
+const { ensureAuthenticated, getUserByEmail } = require('../utils/firebase');
 
 // GET /api/users/:email
 router.get('/:email', ensureAuthenticated, async (req, res) => {
-  const userData = await getUser(req.params.email);
+  const userData = await getUserByEmail(req.params.email);
 
   res.json(userData);
 });
