@@ -89,6 +89,8 @@ function ResponsiveAppBar() {
         } catch (error) {
           console.error(error);
         }
+      } else {
+        injectAds();
       }
     })();
   }, [isSignInLoading]);
@@ -119,8 +121,14 @@ function ResponsiveAppBar() {
   };
 
   const injectAds = () => {
+    const borangAds = document.querySelector('#borang-ads');
+    if (borangAds) {
+      return;
+    }
+
     const adsScript = document.createElement('script');
 
+    adsScript.id = 'borang-ads';
     adsScript.setAttribute(
       'src',
       'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3634416280129603'
