@@ -13,7 +13,7 @@ const SkrinPremiumSubDescription = () => {
   return (
     <>
       <p>
-        With only <s>$9.99</s> $4.99, you will get premium features for{' '}
+        With only <s>$9.99</s> $5.99, you will get premium features for{' '}
         <b>ALL</b> of our products
       </p>
       <Box sx={{ textAlign: 'left' }}>
@@ -49,7 +49,7 @@ const SkrinPremium = () => {
 
   useEffect(() => {
     if (isClicked && userEmail) {
-      window.location.href = `https://buy.stripe.com/aEU14J22Ldx0dRS28f?prefilled_email=${userEmail}`;
+      window.location.href = `https://buy.stripe.com/9AQ9BffTBgJc29a6ow?prefilled_email=${userEmail}`;
     }
   }, [isClicked, userEmail]);
 
@@ -72,7 +72,7 @@ const SkrinPremium = () => {
       <Pricing
         title='Skrin Premium'
         description='Early Adopter Price'
-        price={4.99}
+        price={5.99}
         color={purple['400']}
         subDescription={<SkrinPremiumSubDescription />}
         Button={

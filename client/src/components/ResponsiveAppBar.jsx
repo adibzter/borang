@@ -200,12 +200,12 @@ function ResponsiveAppBar() {
           </Box>
         </Toolbar>
       </Container>
-      <Alert severity='info'>
+      {/* <Alert severity='info'>
         <span style={{ color: purple[400] }}>Skrin Premium</span> will cost{' '}
         <b>$5.99</b> starting on <b>26th of November 2023</b>. Get Skrin Premium
         now while the price still at <b>$4.99</b>! Existing customers will not
         be affected
-      </Alert>
+      </Alert> */}
     </AppBar>
   );
 }
