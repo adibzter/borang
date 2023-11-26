@@ -30,7 +30,7 @@ const Home = () => {
         minHeight='90vh'
         marginTop='60px'
       >
-        <h2>Borang Chrome Extension</h2>
+        <h1>Borang Chrome Extension</h1>
         <iframe
           width='560'
           height='315'

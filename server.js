@@ -6,6 +6,7 @@ const axios = require('axios').default;
 const compression = require('compression');
 
 const app = express();
+app.disable('x-powered-by');
 
 // Middlewares
 app.use(express.json({ limit: '4mb' }));
