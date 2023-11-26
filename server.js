@@ -321,6 +321,9 @@ app.post('/submit', async (req, res) => {
 // GET /api/forms/:id
 app.get('/api/forms/:id', (req, res) => {
   const formData = formDataStore[req.params.id];
+  if (!formData) {
+    res.status(404).json({ message: 'Form Data not found' });
+  }
 
   res.json(formData);
 });

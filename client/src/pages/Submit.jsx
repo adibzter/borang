@@ -49,7 +49,7 @@ const Submit = () => {
   };
 
   useEffect(() => {
-    document.title = 'Borang | Pricing';
+    document.title = 'Borang | Submit';
   }, []);
 
   useEffect(() => {
@@ -59,13 +59,12 @@ const Submit = () => {
 
     (async () => {
       const formId = window.location.search.split('=')[1];
-      let { limit, counter, formUrl, body } = await getFormData(formId);
-      // let { limit, counter, formUrl, body } = {
-      //   limit: 9,
-      //   counter: 2,
-      //   formUrl: 'j',
-      //   body: 'dd',
-      // };
+      const res = await getFormData(formId);
+      if (!res) {
+        return;
+      }
+
+      let { limit, counter, formUrl, body } = res;
 
       let userData = { badges: [] };
 
@@ -106,14 +105,19 @@ const Submit = () => {
       for (let i = 0; i < counter; i++) {
         await wait(15);
 
-        fetch(formUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body,
-        });
-        setRequest((prev) => prev + 1);
+        try {
+          fetch(formUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body,
+          });
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setRequest((prev) => prev + 1);
+        }
       }
     } else {
       for (let i = 0; i < counter; i++) {

@@ -21,7 +21,7 @@ export const getCurrentUser = async () => {
 
 export const getIdToken = async () => {
   const auth = getAuth();
-  const token = await auth.currentUser.getIdToken();
+  const token = await auth.currentUser?.getIdToken();
 
   return token;
 };
