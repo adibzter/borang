@@ -83,6 +83,8 @@ function ResponsiveAppBar() {
 
           if (userData?.badges?.includes('skrin-premium')) {
             setIsPremium(true);
+          } else {
+            injectAds();
           }
         } catch (error) {
           console.error(error);
@@ -114,6 +116,19 @@ function ResponsiveAppBar() {
     setUserPhotoUrl(null);
     setBadges(null);
     setIsPremium(false);
+  };
+
+  const injectAds = () => {
+    const adsScript = document.createElement('script');
+
+    adsScript.setAttribute(
+      'src',
+      'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3634416280129603'
+    );
+    adsScript.setAttribute('async', '');
+    adsScript.setAttribute('crossorigin', 'anonymous');
+
+    document.head.appendChild(adsScript);
   };
 
   return (
