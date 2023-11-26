@@ -2,7 +2,7 @@ import * as React from 'react';
 import Popover from '@mui/material/Popover';
 import { Box, Button, IconButton, Stack, Tooltip } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAward, faGear, faMedal } from '@fortawesome/free-solid-svg-icons';
+import { faBaby, faGear, faMedal } from '@fortawesome/free-solid-svg-icons';
 import { useUserStore } from '../stores/userStore';
 
 export default function SettingsPopover() {
@@ -57,6 +57,15 @@ export default function SettingsPopover() {
           <h3>Settings</h3>
           <Stack direction='column'>
             <Box sx={{ flexGrow: 0, marginY: 2, alignSelf: 'center' }}>
+              <Tooltip title='Early Adopter'>
+                <IconButton color='primary'>
+                  <FontAwesomeIcon
+                    icon={faBaby}
+                    bounce
+                    style={{ animationDuration: '2s' }}
+                  />
+                </IconButton>
+              </Tooltip>
               <Tooltip title='Skrin Premium'>
                 <IconButton color='secondary'>
                   <FontAwesomeIcon

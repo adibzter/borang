@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import { Box, Button } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChrome, faGithub } from '@fortawesome/free-brands-svg-icons';
+import {
+  faChrome,
+  faDiscord,
+  faGithub,
+} from '@fortawesome/free-brands-svg-icons';
 
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
@@ -56,6 +60,14 @@ const Home = () => {
               }
             >
               Install Borang
+            </Button>
+            <Button
+              style={{ marginRight: 2 }}
+              variant='outlined'
+              startIcon={<FontAwesomeIcon icon={faDiscord} />}
+              onClick={() => openNewTab('https://discord.gg/rGkPJju9zD')}
+            >
+              Join Discord
             </Button>
             <SubscriptionDialog />
           </Box>
