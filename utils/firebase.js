@@ -136,10 +136,12 @@ const upsertSubscription = async (invoiceObject) => {
       badges: [...userData.badges, 'skrin-premium'],
     });
   } else {
-    await updateUser(userData.id, {
-      updated_at: Date.now(),
-      badges: [...userData.badges, 'skrin-premium'],
-    });
+    if (!userData.badges.includes('skrin-premium')) {
+      await updateUser(userData.id, {
+        updated_at: Date.now(),
+        badges: [...userData.badges, 'skrin-premium'],
+      });
+    }
   }
 
   let subscriptionData = await getSubscriptionById(invoiceObject.subscription);
