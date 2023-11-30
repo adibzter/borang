@@ -98,6 +98,26 @@ const getSubscriptionById = async (subscriptionId) => {
   return subscriptionData;
 };
 
+const getSubscriptionByCustomerId = async (customerId) => {
+  const subscriptionsRef = db.collection('subscriptions');
+  const subscriptionSnapshot = await subscriptionsRef
+    .where('stripe.customer', '==', customerId)
+    .limit(1)
+    .get();
+
+  if (subscriptionSnapshot.empty) {
+    return null;
+  }
+
+  const subscriptionDoc = subscriptionSnapshot.docs[0];
+  const subscriptionData = {
+    id: subscriptionDoc.id,
+    ...subscriptionDoc.data(),
+  };
+
+  return subscriptionData;
+};
+
 const insertSubscription = async (userId, invoiceObject) => {
   let subscriptionData = {
     user_id: userId,
@@ -156,7 +176,14 @@ const upsertSubscription = async (invoiceObject) => {
 };
 
 const removeSkrinPremiumBadge = async (subscriptionObject) => {
-  const subscriptionData = await getSubscriptionById(subscriptionObject.id);
+  let subscriptionData = await getSubscriptionById(subscriptionObject.id);
+
+  // TODO: Remove this once all subscriptions has "subscription" field
+  if (!subscriptionData) {
+    subscriptionData = await getSubscriptionByCustomerId(
+      subscriptionObject.customer
+    );
+  }
   const userData = await getUserByEmail(subscriptionData.stripe.customer_email);
 
   await updateSubscription(subscriptionData.id, {
