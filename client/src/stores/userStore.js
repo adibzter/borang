@@ -7,6 +7,7 @@ export const useUserStore = create((set) => ({
   userPhotoUrl: null,
   isSignInLoading: null,
   badges: null,
+  userSettings: null,
 
   setIsReady: (isReady) => set(() => ({ isReady: isReady })),
   setUserEmail: (userEmail) => set(() => ({ userEmail: userEmail })),
@@ -17,4 +18,6 @@ export const useUserStore = create((set) => ({
   setIsSignInLoading: (isSignInLoading) =>
     set(() => ({ isSignInLoading: isSignInLoading })),
   setBadges: (badges) => set(() => ({ badges: badges })),
+  setUserSettings: (userSettings) =>
+    set(() => ({ userSettings: userSettings })),
 }));

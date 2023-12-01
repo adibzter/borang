@@ -15,6 +15,29 @@ export const getUser = async (email) => {
   return await response.json();
 };
 
+export const updateUser = async (email, data) => {
+  const tokenId = await getIdToken();
+  if (!tokenId) {
+    return;
+  }
+
+  const body = {
+    email,
+    data,
+  };
+
+  const response = await fetch(`/api/users`, {
+    headers: {
+      Authorization: `Bearer ${tokenId}`,
+      'content-type': 'application/json',
+    },
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+
+  return await response.json();
+};
+
 export const getFormData = async (formId) => {
   const response = await fetch(`/api/forms/${formId}`);
   if (response.status === 404) {

@@ -198,7 +198,8 @@ const removeSkrinPremiumBadge = async (subscriptionObject) => {
 
 module.exports = {
   ensureAuthenticated,
-  upsertSubscription,
   getUserByEmail,
+  updateUser,
+  upsertSubscription,
   removeSkrinPremiumBadge,
 };

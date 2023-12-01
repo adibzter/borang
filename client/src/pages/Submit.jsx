@@ -20,6 +20,7 @@ import SubscriptionDialog from '../components/SubscriptionDialog';
 import { purple } from '@mui/material/colors';
 import { deleteFormData, getFormData, getUser } from '../utils/api';
 import { useUserStore } from '../stores/userStore';
+import { submitFormFree, submitFormPremium } from '../utils/googleForm';
 
 const Submit = () => {
   const [limit, setLimit] = useState(0);
@@ -64,6 +65,7 @@ const Submit = () => {
         return;
       }
 
+      let speed = 50;
       let { limit, counter, formUrl, body } = res;
 
       let userData = { badges: [] };
@@ -76,6 +78,7 @@ const Submit = () => {
         }
 
         setBadges(userData.badges);
+        speed = userData.settings.speed;
       } catch (error) {
         console.error(error);
       }
@@ -93,26 +96,15 @@ const Submit = () => {
 
       setLimit(limit);
       setCounter(counter);
-      spamForm(counter, formUrl, body);
+      spamForm(counter, formUrl, body, speed);
     })();
   }, [isReady]);
 
-  // Wait util
-  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-  const spamForm = async (counter, formUrl, body) => {
+  const spamForm = async (counter, formUrl, body, speed) => {
     if (window._isPremium) {
       for (let i = 0; i < counter; i++) {
-        await wait(15);
-
         try {
-          fetch(formUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body,
-          });
+          await submitFormPremium(formUrl, body, speed);
         } catch (error) {
           console.error(error);
         } finally {
@@ -121,16 +113,8 @@ const Submit = () => {
       }
     } else {
       for (let i = 0; i < counter; i++) {
-        // await wait(10);
-
         try {
-          await fetch(formUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body,
-          });
+          await submitFormFree(formUrl, body);
         } catch (error) {
           console.error(error);
         } finally {
