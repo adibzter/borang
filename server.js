@@ -14,7 +14,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression({ level: 9, memLevel: 9 }));
 
 // API endpoint
-app.use('/api/subscriptions', require('./routes/subscriptionRoute'));
 app.use('/api/users', require('./routes/usersRoute'));
 app.use('/api/subscriptions', require('./routes/subscriptionsRoute'));
 app.use('/api/files', require('./routes/filesRoute'));
