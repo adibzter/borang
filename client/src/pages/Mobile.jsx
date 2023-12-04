@@ -37,8 +37,8 @@ const Mobile = () => {
   }, [iframeSrc]);
 
   function injectScript(iframeDocument) {
-    // const submitUrl = 'https://borang.skrin.xyz/submit';
-    const submitUrl = 'http://localhost:5000/submit';
+    const submitUrl = '/submit';
+    // const submitUrl = 'http://localhost:5000/submit';
 
     let submitButton = iframeDocument.querySelector(
       // '.freebirdFormviewerViewNavigationSubmitButton'
