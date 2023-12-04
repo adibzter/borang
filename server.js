@@ -14,32 +14,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression({ level: 9, memLevel: 9 }));
 
 // API endpoint
+app.use('/api/subscriptions', require('./routes/subscriptionRoute'));
 app.use('/api/users', require('./routes/usersRoute'));
 app.use('/api/subscriptions', require('./routes/subscriptionsRoute'));
+app.use('/api/files', require('./routes/filesRoute'));
+app.use('/api/proxies', require('./routes/proxiesRoute'));
 
 // Webhook endpoint
 app.use('/webhook/stripe', require('./webhooks/stripe'));
 
 app.use(express.static('./client/dist'));
-
-// New form
-app.post('/form', async (req, res) => {
-  try {
-    const url = req.body.url;
-
-    // Get form from Google
-    let htmlData = await (await axios.get(url)).data;
-
-    // const beautify = require('js-beautify').html;
-    // htmlData = beautify(htmlData, { indent_size: 2 });
-
-    res.send(htmlData);
-  } catch (err) {
-    const string = 'Cannot create form';
-    console.log(string);
-    res.send(string);
-  }
-});
 
 const formDataStore = {};
 app.post('/submit', async (req, res) => {
@@ -122,171 +106,29 @@ app.post('/submit', async (req, res) => {
     serverRepo: 'https://github.com/ADIBzTER/borang',
     extensionRepo: 'https://github.com/ADIBzTER/borang-chrome-extension',
   };
-  if (fromExtension) {
-    const formId = randomUUID();
-    formDataStore[formId] = {
-      formUrl,
-      limit,
-      counter,
-      body,
-      waitTime,
-    };
 
+  const formId = randomUUID();
+  formDataStore[formId] = {
+    formUrl,
+    limit,
+    counter,
+    body,
+    waitTime,
+  };
+
+  if (fromExtension) {
     res.redirect(`/_submit?id=${formId}`);
     return;
-
-    res.send(`
-		<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3634416280129603" crossorigin="anonymous"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5FWGPJDJGR"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-5FWGPJDJGR');
-    </script>
-
-    <style>
-        section {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        div.logo {
-            border: 1.5px solid black;
-            width: 190px;
-            border-radius: 5px;
-            margin: auto;
-        }
-
-        div.logo>img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-        }
-    </style>
-			<link rel="stylesheet" href="bootstrap.min.css">
-			<script src="bootstrap.min.js"></script>
-
-			<title>Borang | Submit</title>
-		</head>
-
-		<body>
-			<input type="hidden" id="formUrl" value="${formUrl}">
-			<input type="hidden" id="counter" value="${counter}">
-			<input type="hidden" id="body" value="${body}">
-			<input type="hidden" id="waitTime" value="${waitTime}">
-	 <section>
-        <div class="container">
-            <div>
-                <div class="d-flex align-items-center justify-content-center logo py-1 mb-5">
-                    <img src="Borang.jpg" alt="">
-                    <h2>Borang</h2>
-                </div>
-            </div>
-            <div class="card p-3">
-                <div>
-                    <h3 class="bg-warning p-2 rounded-2">Can you do me a favour by subscribing my <a
-                            href="${urls.subscribeYoutube}" target="_blank">YouTube
-                            channel</a>?
-                    </h3>
-
-                    <p>
-                        ${counter} form(s) submitted but it might not reach the server yet. Wait for 1 minute before
-                        closing
-                        this tab.
-                        <br>
-                        Please share about this extension to media social with hashtag <b>#borang</b> and tell them what
-                        you
-                        use
-                        this
-                        extension for.
-                        <br><br>
-                        We are limiting response to ${limit} to reduce payment for server. After we get a good amount of
-                        donation, we
-                        will
-                        lift the limit.
-                        <br><br>
-                        Do not forget to give this extension 5 stars on <a href="${urls.extensionChromeStore}"
-                            target="_blank">Chrome
-                            Web
-                            Store</a>
-                        <br><br>
-                        This is an open-source project. Feel free to contribute and learn the code.
-                        <br>
-                        Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
-                        <br>
-                        Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
-                    </p>
-
-                    <div class="d-flex justify-content-between">
-                        <div></div>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#donate-modal">
-                            Donate Now
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="privacyPolicy()">
-                            Privacy Policy
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-			<div class="modal fade" id="donate-modal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="donate-modal"
-				aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5">Donation</h1>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body" style="text-align: center">
-							<p>
-								Your form has been submitted. Help us to maintain this project by donating as low as $2. The more is better.
-							</p>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-primary" onclick="donate()">Donate</button>
-							<button type="button" class="btn btn-primary" onclick="showQr()">DuitNow QR (Malaysia)</button>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<script>
-				window.onload = e => {
-					let donateModal = document.querySelector('#donate-modal');
-					donateModal = new bootstrap.Modal(donateModal);
-					setTimeout(() => donateModal.show(), 5000);
-				}
-
-				function donate() {
-					window.open('${urls.stripe}', '_blank').focus();
-				}
-
-				function showQr() {
-					window.open('/qr', '_blank').focus();
-				}
-
-				function privacyPolicy() {
-					window.open('/privacy', '_blank').focus();
-				}
-			</script>
-		</body>
-		`);
+  } else {
+    res.status(200).send(`
+      <script>
+        parent.location.href = '/_submit?id=${formId}';
+      </script>
+    `);
     return;
   }
 
+  // TODO: Use this implementation to handle external proxies to avoid being blocked by google
   // counter - 1 because we already sent 1 data above | UPDATE: remove -1 due because we don't send 1 data anymore
   // for (let i = 0; i < counter - 1; i++) {
   for (let i = 0; i < counter; i++) {
@@ -299,23 +141,6 @@ app.post('/submit', async (req, res) => {
       return;
     }
   }
-
-  res.send(
-    `${counter} form(s) sent. I need to limit this to ${limit} since too many unimportant Google form has been submitted such as Anime & Kpop. Server is not free. I need to pay for it. Hope you understand.\n
-		<br><br>
-		Use <a href="${urls.extensionChromeStore}" target="_blank">Borang Chrome Extension</a> for unlimited form submission and better support. Don't forget to give Borang Chrome Extension 5 stars <a href="https://chrome.google.com/webstore/detail/borang/mokcmggiibmlpblkcdnblmajnplennol">here</a>
-		<br><br>
-		This is an open-source project. Feel free to contribute and learn the code.
-		<br>
-		Server repo: <a href="${urls.serverRepo}">${urls.serverRepo}</a>
-		<br>
-		Chrome Extension repo: <a href="${urls.extensionRepo}">${urls.extensionRepo}</a>
-
-		<br/>
-		<p>If you are from Malaysia, you can support me by donating through my DuitNow QR :)</p>
-		<img src="${urls.duitnow}" alt="duitnow-qr"/>
-		`
-  );
 });
 
 // GET /api/forms/:id
