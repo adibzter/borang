@@ -132,8 +132,8 @@ const Submit = () => {
         component='main'
         display='flex'
         justifyContent='center'
+        alignItems='center'
         minHeight='90vh'
-        marginTop='20px'
       >
         {!isReady ? (
           <Box
@@ -145,8 +145,15 @@ const Submit = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <Box display='flex' flexDirection='column' alignItems='center'>
-            <h1 style={{ textAlign: 'center' }}>Submit</h1>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+            }}
+          >
+            <h1>Submit</h1>
             <h3>
               Can you do me a favour by subscribing my{' '}
               <a href={urls.subscribeYoutube} target='_blank' rel='noreferrer'>

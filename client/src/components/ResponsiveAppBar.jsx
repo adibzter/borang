@@ -6,10 +6,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Alert, Avatar, IconButton, Tooltip } from '@mui/material';
+import { Alert, Avatar, Tooltip } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGoogle, faStripe } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { getCurrentUser, signIn, signOut } from '../utils/firebase';
 import { useUserStore } from '../stores/userStore';
 import LogoAppBar from './LogoAppBar';
@@ -224,8 +224,9 @@ function ResponsiveAppBar() {
         </Toolbar>
       </Container>
       <Alert severity='info'>
-        <b>NEW!</b> <span style={{ color: purple[400] }}>Skrin Premium</span>{' '}
-        users now can control the speed of the submissions. Go to Settings now!
+        <b>BETA</b>: <span style={{ color: purple[400] }}>Skrin Premium</span>{' '}
+        users now can submit form using mobile device! Go to{' '}
+        <a href='/mobile'>mobile page</a> to test it out!
       </Alert>
     </AppBar>
   );

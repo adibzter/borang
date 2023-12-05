@@ -22,7 +22,7 @@ const SkrinPremiumSubDescription = () => {
           <li>Unlimited form submission</li>
           <li>Fast form submission</li>
           <li>No ads</li>
-          <li>Support for mobile (coming soon)</li>
+          <li>Support for mobile (beta)</li>
           <li>Support for form that require sign-in (coming soon)</li>
         </ul>
 

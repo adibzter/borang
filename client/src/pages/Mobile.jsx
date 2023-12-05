@@ -2,43 +2,64 @@ import { useEffect, useState, useRef } from 'react';
 import { Box, Grid, TextField, Typography } from '@mui/material';
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import TemplateDialog from '../components/TemplateDialog';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useUserStore } from '../stores/userStore';
+import { useNavigate } from 'react-router-dom';
 
 const Mobile = () => {
+  const [formUrl, setFormUrl] = useState('');
+  const [isGettingForm, setIsGettingForm] = useState(false);
   const [iframeSrc, setIframeSrc] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formCounter, setFormCounter] = useState(0);
+  const [isPremium, setIsPremium] = useState(false);
+
+  const [badges] = useUserStore((state) => [state.badges]);
 
   const iframeRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = 'Borang | Mobile';
-
-    (async () => {
-      const url = `https://docs.google.com/forms/d/e/1FAIpQLSdlDcXOLEzToHOMWM2SnP0Ux5lQURvWvk_Ijt-ZfOMVwIH_GQ/viewform`;
-
-      const response = await fetch(`/api/files`, {
-        headers: {
-          'content-type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({ url }),
-      });
-
-      const { fileId } = await response.json();
-      setIframeSrc(`/api/files/${fileId}`);
-    })();
   }, []);
 
-  // useEffect(() => {
-  //   if (!iframeSrc) {
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!badges) {
+      return;
+    }
 
-  //   const iframe = document.querySelector('#iframe-mobile');
-  //   iframe.addEventListener('load', () => {
-  //     injectScript(iframe.contentDocument);
-  //   });
-  // }, [iframeSrc]);
+    if (badges.includes('skrin-premium')) {
+      setIsPremium(true);
+    } else {
+      navigate('/');
+    }
+  }, [badges]);
+
+  async function getForm() {
+    if (!formUrl) {
+      return;
+    }
+
+    if (
+      !formUrl.startsWith('https://docs.google.com/forms/') &&
+      !formUrl.endsWith('/viewform')
+    ) {
+      alert('Form URL is not valid');
+      return;
+    }
+
+    setIsGettingForm(true);
+    const response = await fetch(`/api/files`, {
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ url: formUrl }),
+    });
+    const { fileId } = await response.json();
+    setIframeSrc(`/api/files/${fileId}`);
+    setIsGettingForm(false);
+  }
 
   function handleIframeLoaded() {
     if (!iframeSrc) {
@@ -48,7 +69,6 @@ const Mobile = () => {
   }
 
   function injectScript() {
-    console.log('syub');
     const iframeDocument = iframeRef.current.contentDocument;
     const submitUrl = '/submit';
     // const submitUrl = 'http://localhost:5000/submit';
@@ -58,6 +78,10 @@ const Mobile = () => {
       // '.uArJ5e.UQuaGc.Y5sE8d.VkkpIf.NqnGTe'
       '.uArJ5e.UQuaGc.Y5sE8d.VkkpIf'
     );
+
+    if (!submitButton) {
+      return;
+    }
 
     const script = iframeDocument.querySelector('body > script');
     const clone = script.cloneNode(true);
@@ -71,22 +95,20 @@ const Mobile = () => {
     form.method = 'POST';
     form.action = submitUrl;
 
-    const broButton = iframeDocument.createElement('button');
-    broButton.textContent = 'Submit bro';
-    broButton.onclick = () => {
-      submitForm(iframeDocument, formUrl, 32);
-    };
-    form.appendChild(broButton);
+    const borangSubmitButton = iframeDocument.createElement('button');
+    borangSubmitButton.textContent = 'Submit';
+    submitButton.replaceWith(borangSubmitButton);
 
-    submitButton.onclick = async () => {
+    borangSubmitButton.onclick = async (e) => {
+      e.preventDefault();
       setIsDialogOpen(true);
-      // const counter = +prompt('How many time you want to submit this form?');
-      // if (!counter) {
-      //   alert('Please enter a number');
-      //   return;
-      // }
-      // submitForm(iframeDocument, formUrl, counter);
-      submitForm(iframeDocument, formUrl, 32);
+      const counter = +prompt('How many time you want to submit this form?');
+      if (!counter) {
+        alert('Please enter a number');
+        return;
+      }
+      submitForm(iframeDocument, formUrl, counter);
+      // submitForm(iframeDocument, formUrl, 32);
     };
   }
 
@@ -105,52 +127,71 @@ const Mobile = () => {
     counter.value = submitNumber;
     form.appendChild(counter);
 
-    form.querySelectorAll('input').forEach((i) => {
-      console.log('form', i);
-    });
     form.submit();
   }
 
   return (
     <>
       <ResponsiveAppBar />
-      <Box
-        component='main'
-        alignItems='center'
-        justifyContent='center'
-        display='flex'
-        minHeight='90vh'
-        marginTop='20px'
-        flexDirection='column'
-      >
-        <TemplateDialog
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
+      {isPremium && (
+        <Box
+          component='main'
+          alignItems='center'
+          justifyContent='center'
+          display='flex'
+          minHeight='90vh'
+          flexDirection='column'
         >
-          <Grid sx={{ margin: 3, display: 'flex', flexDirection: 'column' }}>
-            <Typography sx={{ marginBottom: 2 }}>
-              How many time you want to submit this form?
-            </Typography>
-            <TextField
-              id='outlined-basic'
-              label='Number of submission'
-              variant='outlined'
-              type='number'
-              onChange={(e) => setFormCounter(e.target.value)}
-            />
-          </Grid>
-        </TemplateDialog>
+          {/* <TemplateDialog
+            isDialogOpen={isDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+          >
+            <Grid sx={{ margin: 3, display: 'flex', flexDirection: 'column' }}>
+              <Typography sx={{ marginBottom: 2 }}>
+                How many time you want to submit this form?
+              </Typography>
+              <TextField
+                id='outlined-basic'
+                label='Number of submission'
+                variant='outlined'
+                type='number'
+                onChange={(e) => setFormCounter(e.target.value)}
+              />
+            </Grid>
+          </TemplateDialog> */}
 
-        <iframe
-          ref={iframeRef}
-          src={iframeSrc}
-          id='iframe-mobile'
-          frameBorder='0'
-          width='100%'
-          height='600px'
-          onLoad={handleIframeLoaded}
-        ></iframe>
-      </Box>
+          {!iframeSrc ? (
+            <>
+              <h2>Mobile</h2>
+              <TextField
+                id='outlined-basic'
+                label='Google Form URL'
+                variant='outlined'
+                type='text'
+                fullWidth={true}
+                onChange={(e) => setFormUrl(e.target.value)}
+              />
+              <LoadingButton
+                sx={{ marginTop: 2 }}
+                variant='contained'
+                loading={isGettingForm}
+                onClick={getForm}
+              >
+                Get Form
+              </LoadingButton>
+            </>
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={iframeSrc}
+              id='iframe-mobile'
+              frameBorder='0'
+              onLoad={handleIframeLoaded}
+              style={{ width: '100%', height: '600px', marginTop: '100px' }}
+            ></iframe>
+          )}
+        </Box>
+      )}
     </>
   );
 };

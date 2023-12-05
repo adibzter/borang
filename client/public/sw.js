@@ -57,7 +57,6 @@ function deserialize(data) {
       }),
     })
   );
-  //   return Promise.resolve(new Request(data.url, data));
 }
 
 async function fetchWithProxy(request) {

@@ -2,21 +2,45 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
+
+import { MenuOutlined } from '@mui/icons-material';
+
 import { IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
+const pages = [
+  {
+    id: 'products',
+    display: 'Products',
+  },
+  {
+    id: 'pricing',
+    display: 'Pricing',
+  },
+  {
+    id: 'about',
+    display: 'About',
+  },
+  {
+    id: 'privacy',
+    display: 'Privacy Policy',
+  },
+  {
+    id: 'mobile',
+    display: 'Mobile',
+  },
+];
 
 const anchor = 'left';
 export default function SwipeableTemporaryDrawer() {
   const [state, setState] = useState({
     left: false,
   });
+
+  const navigate = useNavigate();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -38,26 +62,10 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+        {pages.map((page) => (
+          <ListItem key={page.id} disablePadding>
+            <ListItemButton onClick={() => navigate(`/${page.id}`)}>
+              <ListItemText primary={page.display} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -76,7 +84,7 @@ export default function SwipeableTemporaryDrawer() {
           onClick={toggleDrawer(anchor, true)}
           color='black'
         >
-          <MenuIcon />
+          <MenuOutlined />
         </IconButton>
         <SwipeableDrawer
           anchor={anchor}
