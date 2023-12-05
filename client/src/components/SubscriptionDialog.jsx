@@ -10,7 +10,7 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide() {
+export default function SubscriptionDialog() {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

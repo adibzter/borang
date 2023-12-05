@@ -1,5 +1,9 @@
 self.addEventListener('fetch', async function (event) {
-  if (event.request.url.startsWith('https://www.gstatic.com')) {
+  const url = event.request.url;
+  if (
+    url.startsWith('https://www.gstatic.com') ||
+    url.startsWith('https://play.google.com')
+  ) {
     event.respondWith(fetchWithParamAddedToRequestBody(event.request));
   } else {
     event.respondWith(fetch(event.request));
@@ -42,9 +46,6 @@ function serialize(request) {
 }
 function deserialize(data) {
   const url = '/api/proxies';
-  // const url = `http://localhost:1111/post`;
-  // const url = `http://localhost:5000/post`;
-  //   const url = `https://proxy.skrin.xyz`;
   return Promise.resolve(
     new Request(url, {
       method: 'POST',
