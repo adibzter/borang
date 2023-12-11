@@ -17,6 +17,7 @@ import { faCircleCheck, faMedal } from '@fortawesome/free-solid-svg-icons';
 
 import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import SubscriptionDialog from '../components/SubscriptionDialog';
+import TemplateDialog from '../components/TemplateDialog';
 import { purple } from '@mui/material/colors';
 import { deleteFormData, getFormData, getUser } from '../utils/api';
 import { useUserStore } from '../stores/userStore';
@@ -27,6 +28,7 @@ const Submit = () => {
   const [counter, setCounter] = useState(1);
   const [request, setRequest] = useState(0);
   const [isPremium, setIsPremium] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [isReady, userEmail, setBadges] = useUserStore((state) => [
     state.isReady,
@@ -51,6 +53,10 @@ const Submit = () => {
 
   useEffect(() => {
     document.title = 'Borang | Submit';
+
+    setTimeout(() => {
+      setIsDialogOpen(true);
+    }, 5000);
   }, []);
 
   useEffect(() => {
@@ -255,6 +261,27 @@ const Submit = () => {
           </Box>
         )}
       </Box>
+      <TemplateDialog
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ padding: 3 }}>
+            You can spam using <b>mobile device</b> now! Subscribe to{' '}
+            <span style={{ color: purple[400] }}>Skrin Premium</span> for more
+            features
+          </p>
+          <iframe
+            width='315'
+            height='560'
+            src='https://www.youtube.com/embed/7OguBowi9pA?si=cBsV-qU40qOzwKYN'
+            title='YouTube video player'
+            frameBorder='0'
+            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+            allowfullscreen
+          ></iframe>
+        </div>
+      </TemplateDialog>
     </>
   );
 };
