@@ -35,7 +35,7 @@ app.post('/submit', async (req, res) => {
 
   if (!formUrl) {
     res.send(
-      'Something went wrong. If you are using mobile, please use desktop.'
+      'Something went wrong. Contact us on <a href="https://discord.gg/rGkPJju9zD">Discord</a>'
     );
     return;
   }
