@@ -275,12 +275,30 @@ const Submit = () => {
         setIsDialogOpen={setIsDialogOpen}
       >
         <div style={{ textAlign: 'center' }}>
+          <h3>❗Attention❗</h3>
           <p style={{ padding: 3 }}>
-            You can spam using <b>mobile device</b> now! Subscribe to{' '}
-            <span style={{ color: purple[400] }}>Skrin Premium</span> for more
-            features
+            Please fill in this quick survey regarding Skrin Premium pricing.
           </p>
-          <iframe
+          <a
+            href='https://forms.gle/xsVE4M93apj4TPP78'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            https://forms.gle/xsVE4M93apj4TPP78
+          </a>
+          <p>
+            This survey is to reduce price of Skrin Premium from <b>$5.99</b> to{' '}
+            <b>$1.00</b>.
+          </p>
+          <p>
+            But this come with a cost which is everyone need to pay for it. No
+            more free tier.
+          </p>
+          <p>
+            We want to know the willingness of Borang's user to pay $1/month for
+            all the features including premium features.
+          </p>
+          {/* <iframe
             width='315'
             height='560'
             src='https://www.youtube.com/embed/7OguBowi9pA?si=cBsV-qU40qOzwKYN'
@@ -288,7 +306,7 @@ const Submit = () => {
             frameBorder='0'
             allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
             allowfullscreen
-          ></iframe>
+          ></iframe> */}
         </div>
       </TemplateDialog>
     </>
