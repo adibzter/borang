@@ -169,7 +169,7 @@ const upsertSubscription = async (invoiceObject) => {
   if (!subscriptionData) {
     await insertSubscription(userData.id, invoiceObject);
   } else {
-    await updateSubscription(invoiceObject.subscription, {
+    await updateSubscription(subscriptionData.id, {
       updated_at: Date.now(),
     });
   }
