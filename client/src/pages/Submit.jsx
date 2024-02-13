@@ -54,9 +54,9 @@ const Submit = () => {
   useEffect(() => {
     document.title = 'Borang | Submit';
 
-    setTimeout(() => {
-      setIsDialogOpen(true);
-    }, 5000);
+    // setTimeout(() => {
+    //   setIsDialogOpen(true);
+    // }, 5000);
   }, []);
 
   useEffect(() => {
@@ -133,14 +133,7 @@ const Submit = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Toolbar />
-      <Box
-        component='main'
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        minHeight='90vh'
-      >
+      <Box component='main' display='flex' justifyContent='center'>
         {!isReady ? (
           <Box
             display='flex'
@@ -167,6 +160,33 @@ const Submit = () => {
               </a>
               ?
             </h3>
+            <div style={{ textAlign: 'center' }}>
+              <h3>❗Attention❗</h3>
+              <p style={{ padding: 3 }}>
+                Please fill in this quick survey regarding Skrin Premium
+                pricing.
+              </p>
+              <a
+                href='https://forms.gle/xsVE4M93apj4TPP78'
+                target='_blank'
+                rel='noreferrer noopener'
+              >
+                https://forms.gle/xsVE4M93apj4TPP78
+              </a>
+              <p>
+                This survey is to reduce price of Skrin Premium from{' '}
+                <b>$5.99</b> to <b>$1.00</b>.
+              </p>
+              {/* <iframe
+            width='315'
+            height='560'
+            src='https://www.youtube.com/embed/7OguBowi9pA?si=cBsV-qU40qOzwKYN'
+            title='YouTube video player'
+            frameBorder='0'
+            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+            allowfullscreen
+          ></iframe> */}
+            </div>
             {request !== counter ? (
               <CircularProgress
                 variant='determinate'
