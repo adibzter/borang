@@ -14,15 +14,7 @@ const Pricing = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Toolbar />
-      <Box
-        component='main'
-        display='flex'
-        flexDirection='column'
-        alignItems='center'
-        minHeight='90vh'
-        marginTop='20px'
-      >
+      <Box component='main' display='flex' flexDirection='column'>
         <h1 style={{ textAlign: 'center' }}>Pricing</h1>
         <Box display='flex' flexDirection='row'>
           <Grid container justifyContent='center'>

@@ -137,9 +137,7 @@ const Mobile = () => {
         <Box
           component='main'
           alignItems='center'
-          justifyContent='center'
           display='flex'
-          minHeight='90vh'
           flexDirection='column'
         >
           {/* <TemplateDialog

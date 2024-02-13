@@ -22,14 +22,7 @@ const Home = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Box
-        display='flex'
-        justifyContent='center'
-        alignItems='center'
-        flexDirection='column'
-        minHeight='90vh'
-        marginTop='60px'
-      >
+      <Box display='flex' alignItems='center' flexDirection='column'>
         <h1>Borang Chrome Extension</h1>
         <iframe
           width='560'

@@ -10,14 +10,7 @@ const Privacy = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Toolbar />
-      <Box
-        component='main'
-        display='flex'
-        justifyContent='center'
-        minHeight='90vh'
-        marginTop='20px'
-      >
+      <Box component='main' display='flex' justifyContent='center'>
         <Box>
           <h1 style={{ textAlign: 'center' }}>Privacy Policy</h1>
           <h2>Consent</h2>

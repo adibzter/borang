@@ -141,7 +141,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar
-      position='fixed'
+      position='sticky'
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
         boxShadow: 'none',
